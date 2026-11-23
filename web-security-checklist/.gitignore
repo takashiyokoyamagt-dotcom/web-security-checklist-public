@@ -1,0 +1,24 @@
+# 依存関係(evals配下のサンプルアプリで生成されうるもの)
+node_modules/
+package-lock.json
+# 例外: sample-vulnerable-app の lockfile は追跡する(SCAの期待値がこの版に依存する。evals/README.md 参照)
+!evals/sample-vulnerable-app/package-lock.json
+
+# 実行時に生成されるDB・ログ
+*.db
+*.sqlite
+*.sqlite3
+data/
+*.log
+npm-debug.log*
+
+# 実際の秘密情報を含みうる.env(evals配下は.env.exampleのみ追跡)
+.env
+.env.local
+
+# OS/エディタ
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc

@@ -1,0 +1,54 @@
+# 各チェッカーの結果の基準値（2026-10-12、ブランチ feat/finding-precision〔47節・第三者レビュー反映後〕のスクリプトで実測）。
+# mini-smoke-3・run4 の各行は、過去のモード3の実行成果物（check_refs は対象の evals/ のアプリと照合）
+# web-security-checklist-workspace/{mini-smoke-3,run4}/outputs/ に対する各チェッカーの結果である。
+# 成果物はリポジトリの web-security-checklist-workspace/ 側にあり、スキルのディレクトリには無い。
+# スキルのディレクトリだけを移したときは、この2つの outputs/ も必要である（無いと照合できない）。
+# 実行したコマンドと、要約の取り出し方は README.md にある。この先頭6行の「# 」で始まる説明行と、続く空行1行は照合から除く。
+
+## docs integrity
+RESULT: OK
+## check_cvss_decisions --self-test
+self-test OK (正常系 + 破壊113ケース全てNG)
+## check_5b_clique --self-test
+SELF-TEST OK
+## check_docs_integrity --self-test
+self-test OK (正常系 + 破壊102ケース全て想定のコードで検出)
+## calculate_cvss --self-test
+自己テスト成功: 8/8件が一致しました。
+## fetch_epss_kev --self-test
+SELF-TEST OK
+## make_idmap --self-test
+self-test OK (正常系 + NG全ケース検出)
+## locate_snippet --self-test
+self-test OK (正常系 + 省略行・複数一致・不一致・インデント違い・入力不正)
+## check_sources --self-test
+SELF-TEST OK
+## check_refs --self-test
+self-test OK (正常系 + 行のずれ・実在・行数・区切り・対象外・割り当て・否定・定義・修正後のツリー・特殊ファイル・CLI)
+## mini-smoke-3 check_cvss_decisions --final --strict --report
+WARN: 確定行のrevがメモ行以下の履歴行あり（22行: L24,L25,L26,L27,L28,L29,L30,L31,L32,L33,L34,L35,L36,L37,L38,L39,L40,L41,L42,L43,L44,L45）。報告書2節の判定記録欄に開示すること
+WARN: 判定根拠の文単位の流用（同じ文が3指摘以上。1文）: 「v4.0のACは防御機構の回避難度だけを表す」6.10(v4.0 AC)・6.16(v4.0 AC)・6.17(v4.0 AC)・6.18(v4.0 AC)。指摘ごとに事実を入れて書き直す
+WARN: 7節で陽性対照が無い／条件を満たさないとされた非再現が、6節で引き下げの根拠に使われている（A-5。人間が確認）: 6.20(v3.1 I)・6.20(v4.0 VI)
+WARN: 5節でです・ます調の文が過半の指摘（文体）: 22/22件（わかりやすい解説22件） 5.1(わかりやすい解説3/3文)、5.2(わかりやすい解説2/2文)、5.3(わかりやすい解説2/2文)ほか19件。である調で統一。文末を「〜である」「〜できる」に（文末の語による機械判定。例文のです・ます調も数える）
+RESULT: OK
+## mini-smoke-3 check_5b_clique --report
+OK: 全群がクリーク・導出と一致（表の内部整合のみ。CWE共有の実在は未検証）
+OK: 連鎖切断5組の修正内容の解説に相手の番号あり（双方向）
+OK: 5c(c)の注記あり（基準5.1、21指摘）
+rc=0
+## mini-smoke-3 check_refs
+参照55件（解決55・うち候補が複数0・対象外0・未解決0）、識別子で照合8件のうちWARN 0件（0.0%）、近接0件（範囲外だが前後3行以内。--verboseで一覧）
+RESULT: OK
+## run4 check_cvss_decisions --final --strict --report
+WARN: 判定根拠の文単位の流用（同じ文が3指摘以上。1文）: 「v4.0のACは防御機構を回避する難しさだけを表す」6.31(v4.0 AC)・6.33(v4.0 AC)・6.35(v4.0 AC)。指摘ごとに事実を入れて書き直す
+WARN: 7節で陽性対照が無い／条件を満たさないとされた非再現が、6節で引き下げの根拠に使われている（A-5。人間が確認）: 6.32(v3.1 AC)
+WARN: 5節でです・ます調の文が過半の指摘（文体）: 39/39件（わかりやすい解説39件） 5.1(わかりやすい解説3/3文)、5.2(わかりやすい解説2/2文)、5.3(わかりやすい解説3/3文)ほか36件。である調で統一。文末を「〜である」「〜できる」に（文末の語による機械判定。例文のです・ます調も数える）
+RESULT: OK
+## run4 check_5b_clique --report
+OK: 全群がクリーク・導出と一致（表の内部整合のみ。CWE共有の実在は未検証）
+OK: 連鎖切断26組の修正内容の解説に相手の番号あり（双方向）
+OK: 5c(c)の注記あり（基準5.1、38指摘）
+rc=0
+## run4 check_refs
+参照560件（解決459・うち候補が複数0・対象外9・未解決92）、識別子で照合87件のうちWARN 0件（0.0%）、近接2件（範囲外だが前後3行以内。--verboseで一覧）
+RESULT: OK

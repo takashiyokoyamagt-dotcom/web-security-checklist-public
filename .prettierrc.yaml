@@ -1,0 +1,12 @@
+# super-linter は Prettier に設定ファイルを渡さず、対象ファイルから親ディレクトリへ向かって探す仕様のため、
+# リポジトリ直下に置く(.github/linters 配下では読み込まれない)。
+# 既存の JS/JSON の書式に合わせる(適用して全面整形するのではなく、現行の書式を「正」とするための設定)。
+
+# 既存の JS(evals/gen-target-app 等)はシングルクォート。
+singleQuote: true
+overrides:
+  # evals/evals.json は長い文字列と1行の配列(`"files": [...]`)を含み、既定の80桁では配列が展開されてしまう。
+  # Biome の json.formatter.lineWidth(biome.json)と同じ100に揃える。
+  - files: '*.json'
+    options:
+      printWidth: 100

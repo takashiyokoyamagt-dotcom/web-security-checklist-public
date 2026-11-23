@@ -1,0 +1,499 @@
+{
+  "schema": 1,
+  "description": "references/ が根拠にする原典の採用版・確認日・確認先・影響範囲。scripts/check_sources.py が読む（確認日の経過Bはモード3の手順0とモード2の手順1、最新版の確認Aはモード3の手順5〔報告書の確定直前〕で実行する。references/sources/source-versions.md）。採用版を変えるときは、対応する references/ の本文と同じコミットで更新する（scripts/check_docs_integrity.py [7] が食い違いを検出する）。確認日(confirmed_on)から stale_after_months か月(カレンダーの月)を過ぎた原典は、check_sources.py が「確認日が古い」と警告する。confirmed_basis は確認日の根拠: human=人が確認した日(referencesに明記)、introduced=この VERSIONS.json を導入した日(人の確認ではない)。",
+  "updated": "2026-11-23",
+  "stale_after_months": 6,
+  "sources": {
+    "asvs": {
+      "title": "OWASP ASVS",
+      "adopted": "v5.0.0",
+      "adopted_text": "v5.0.0",
+      "adopted_in": "references/checklists/principles.md",
+      "confirmed_on": "2026-09-02",
+      "confirmed_basis": "human",
+      "check": {
+        "method": "github_releases",
+        "url": "https://api.github.com/repos/OWASP/ASVS/releases?per_page=30",
+        "page": "https://github.com/OWASP/ASVS/releases"
+      },
+      "affects": [
+        {
+          "file": "references/checklists/principles.md",
+          "categories": [
+            "1 入力値検証",
+            "2 認証",
+            "3 セッション管理",
+            "4 アクセス制御・認可",
+            "5 データベース",
+            "6 暗号・秘密情報管理",
+            "7 エラー処理・ログ",
+            "8 通信・セキュリティ設定",
+            "9 ファイルアップロード・ファイル操作"
+          ],
+          "scope": "各カテゴリの「参照:」行のASVS章番号・章名とチェック項目（カテゴリ10は「ASVSに無い」との記述のみ）"
+        }
+      ],
+      "note": "確認日はreferences/checklists/principles.mdの「確認日: 2026-09-02」。GitHubの releases/latest は毎回作り直されるタグ latest（開発版）を返すため使わず、安定版のタグ（v5.0.0_release 形式）だけを一覧から選ぶ。"
+    },
+    "cwe_top25": {
+      "title": "CWE Top 25",
+      "adopted": "2025",
+      "adopted_text": "2025年版",
+      "adopted_in": "references/sources/cwe-top25.md",
+      "adopted_detail": {
+        "ranking": [
+          "CWE-79",
+          "CWE-89",
+          "CWE-352",
+          "CWE-862",
+          "CWE-787",
+          "CWE-22",
+          "CWE-416",
+          "CWE-125",
+          "CWE-78",
+          "CWE-94",
+          "CWE-120",
+          "CWE-434",
+          "CWE-476",
+          "CWE-121",
+          "CWE-502",
+          "CWE-122",
+          "CWE-863",
+          "CWE-20",
+          "CWE-284",
+          "CWE-200",
+          "CWE-306",
+          "CWE-918",
+          "CWE-77",
+          "CWE-639",
+          "CWE-770"
+        ]
+      },
+      "confirmed_on": "2026-10-10",
+      "confirmed_basis": "human",
+      "check": {
+        "method": "cwe_top25",
+        "url": "https://cwe.mitre.org/top25/",
+        "list_url": "https://cwe.mitre.org/top25/archive/{year}/{year}_cwe_top25.html",
+        "page": "https://cwe.mitre.org/top25/"
+      },
+      "affects": [
+        {
+          "file": "references/sources/cwe-top25.md",
+          "categories": [],
+          "scope": "Top 25の表（順位順の全25件）と補助の表の区分、基準年度の記述"
+        },
+        {
+          "file": "references/checklists/principles.md",
+          "categories": [
+            "1 入力値検証",
+            "2 認証",
+            "3 セッション管理",
+            "4 アクセス制御・認可",
+            "5 データベース",
+            "6 暗号・秘密情報管理",
+            "7 エラー処理・ログ",
+            "8 通信・セキュリティ設定",
+            "9 ファイルアップロード・ファイル操作",
+            "10 依存関係管理",
+            "11 ビジネスロジック・API設計"
+          ],
+          "scope": "各カテゴリの「参照:」行のCWE番号"
+        },
+        {
+          "file": "references/pipeline/finding-arbiter.md",
+          "categories": [],
+          "scope": "5a（CWEタグを付ける条件）と5cの優先順位（Top 25の表に載るCWEを優先）が、cwe-top25.mdの表を参照する"
+        }
+      ],
+      "note": "adopted_detail.ranking は references/sources/cwe-top25.md のTop 25の表の順（check_docs_integrity.py が一致を検査する）。 確認先は現行のTop 25のページ（/top25/）。archive/ のページは過去の年だけを並べ、現行の年（2025年版）を含まない（2026-10-12に確認）ため使わない。"
+    },
+    "ipa": {
+      "title": "IPA「安全なウェブサイトの作り方」",
+      "adopted": "改訂第7版",
+      "adopted_text": "改訂第7版",
+      "adopted_in": "references/sources/ipa-secure-website.md",
+      "adopted_detail": {
+        "printing": 4,
+        "published": "2021-03-31"
+      },
+      "confirmed_on": "2026-10-12",
+      "confirmed_basis": "introduced",
+      "check": {
+        "method": "ipa_page",
+        "url": "https://www.ipa.go.jp/security/vuln/websecurity/about.html",
+        "page": "https://www.ipa.go.jp/security/vuln/websecurity/about.html"
+      },
+      "affects": [
+        {
+          "file": "references/sources/ipa-secure-website.md",
+          "categories": [],
+          "scope": "章構成（1章の11脆弱性・2章・3章）の記述全体"
+        },
+        {
+          "file": "references/checklists/principles.md",
+          "categories": [
+            "1 入力値検証",
+            "2 認証",
+            "3 セッション管理",
+            "4 アクセス制御・認可",
+            "5 データベース",
+            "7 エラー処理・ログ",
+            "8 通信・セキュリティ設定",
+            "9 ファイルアップロード・ファイル操作"
+          ],
+          "scope": "各カテゴリの「参照:」行のIPAの章"
+        },
+        {
+          "file": "references/modes/mode3-by-source.md",
+          "categories": [],
+          "scope": "出典別レポート（IPA）の脆弱性名別のグループ"
+        }
+      ],
+      "note": "references/sources/ipa-secure-website.md に版の確認日の明記はない（章構成の確認日は2026-09-08、版の確認はdocs/SOURCES.mdの2026-08-30）。confirmed_on は VERSIONS.json を導入した2026-10-12に設定したもので、ユーザーが確認した日ではない。adopted_detail は同日にIPAのページで確認した最新の公開日・刷（日本語版）。"
+    },
+    "owasp_cheatsheets": {
+      "title": "OWASP Cheat Sheet Series",
+      "adopted": "シート一覧（2026-11-23時点）",
+      "adopted_in": "references/sources/owasp-cheatsheets.md",
+      "adopted_detail": {
+        "referenced": [
+          {
+            "name": "Input Validation",
+            "file": "Input_Validation_Cheat_Sheet"
+          },
+          {
+            "name": "SQL Injection Prevention",
+            "file": "SQL_Injection_Prevention_Cheat_Sheet"
+          },
+          {
+            "name": "OS Command Injection Defense",
+            "file": "OS_Command_Injection_Defense_Cheat_Sheet"
+          },
+          {
+            "name": "Cross Site Scripting Prevention",
+            "file": "Cross_Site_Scripting_Prevention_Cheat_Sheet"
+          },
+          {
+            "name": "Path Traversal Prevention",
+            "file": "Path_Traversal_Prevention_Cheat_Sheet"
+          },
+          {
+            "name": "Authentication",
+            "file": "Authentication_Cheat_Sheet"
+          },
+          {
+            "name": "Password Storage",
+            "file": "Password_Storage_Cheat_Sheet"
+          },
+          {
+            "name": "Credential Stuffing Prevention",
+            "file": "Credential_Stuffing_Prevention_Cheat_Sheet"
+          },
+          {
+            "name": "Multifactor Authentication",
+            "file": "Multifactor_Authentication_Cheat_Sheet"
+          },
+          {
+            "name": "Session Management",
+            "file": "Session_Management_Cheat_Sheet"
+          },
+          {
+            "name": "Authorization",
+            "file": "Authorization_Cheat_Sheet"
+          },
+          {
+            "name": "Access Control",
+            "file": "Access_Control_Cheat_Sheet"
+          },
+          {
+            "name": "Database Security",
+            "file": "Database_Security_Cheat_Sheet"
+          },
+          {
+            "name": "Cryptographic Storage",
+            "file": "Cryptographic_Storage_Cheat_Sheet"
+          },
+          {
+            "name": "Secrets Management",
+            "file": "Secrets_Management_Cheat_Sheet"
+          },
+          {
+            "name": "Key Management",
+            "file": "Key_Management_Cheat_Sheet"
+          },
+          {
+            "name": "Logging",
+            "file": "Logging_Cheat_Sheet"
+          },
+          {
+            "name": "Error Handling",
+            "file": "Error_Handling_Cheat_Sheet"
+          },
+          {
+            "name": "HTTP Headers",
+            "file": "HTTP_Headers_Cheat_Sheet"
+          },
+          {
+            "name": "Transport Layer Security",
+            "file": "Transport_Layer_Security_Cheat_Sheet"
+          },
+          {
+            "name": "Cross-Site Request Forgery Prevention",
+            "file": "Cross-Site_Request_Forgery_Prevention_Cheat_Sheet"
+          },
+          {
+            "name": "CORS Security",
+            "file": "CORS_Security_Cheat_Sheet"
+          },
+          {
+            "name": "File Upload",
+            "file": "File_Upload_Cheat_Sheet"
+          },
+          {
+            "name": "Vulnerable Dependency Management",
+            "file": "Vulnerable_Dependency_Management_Cheat_Sheet"
+          },
+          {
+            "name": "REST Security",
+            "file": "REST_Security_Cheat_Sheet"
+          },
+          {
+            "name": "Mass Assignment",
+            "file": "Mass_Assignment_Cheat_Sheet"
+          }
+        ],
+        "sheets": [
+          "AI-Powered_Advertising_Systems_Security_Cheat_Sheet",
+          "AI_Agent_Security_Cheat_Sheet",
+          "AML_Sanctions_AI_Agent_Payments_Cheat_Sheet",
+          "Abuse_Case_Cheat_Sheet",
+          "Access_Control_Cheat_Sheet",
+          "Attack_Surface_Analysis_Cheat_Sheet",
+          "Authentication_Cheat_Sheet",
+          "Authentication_Patterns_Cheat_Sheet",
+          "Authorization_Cheat_Sheet",
+          "Authorization_Decisions_And_Output_Handling_Cheat_Sheet",
+          "Authorization_Patterns_Cheat_Sheet",
+          "Authorization_Policy_And_Data_Distribution_Cheat_Sheet",
+          "Authorization_Regression_Testing_Cheat_Sheet",
+          "Authorization_Testing_Automation_Cheat_Sheet",
+          "Automotive_Security_Cheat_Sheet",
+          "Bean_Validation_Cheat_Sheet",
+          "Bot_Management_and_Anti-Automation_Cheat_Sheet",
+          "Browser_Extension_Vulnerabilities_Cheat_Sheet",
+          "Business_Logic_Security_Cheat_Sheet",
+          "C-Based_Toolchain_Hardening_Cheat_Sheet",
+          "CI_CD_Security_Cheat_Sheet",
+          "CORS_Security_Cheat_Sheet",
+          "Choosing_and_Using_Security_Questions_Cheat_Sheet",
+          "Clickjacking_Defense_Cheat_Sheet",
+          "Content_Security_Policy_Cheat_Sheet",
+          "Cookie_Theft_Mitigation_Cheat_Sheet",
+          "Credential_Stuffing_Prevention_Cheat_Sheet",
+          "Cross-Site_Request_Forgery_Prevention_Cheat_Sheet",
+          "Cross_Site_Scripting_Prevention_Cheat_Sheet",
+          "Cryptographic_Storage_Cheat_Sheet",
+          "DOM_Clobbering_Prevention_Cheat_Sheet",
+          "DOM_based_XSS_Prevention_Cheat_Sheet",
+          "Database_Security_Cheat_Sheet",
+          "Denial_of_Service_Cheat_Sheet",
+          "Dependency_Graph_SBOM_Cheat_Sheet",
+          "Deserialization_Cheat_Sheet",
+          "Django_REST_Framework_Cheat_Sheet",
+          "Django_Security_Cheat_Sheet",
+          "Docker_Security_Cheat_Sheet",
+          "DotNet_Security_Cheat_Sheet",
+          "Drone_Security_Cheat_Sheet",
+          "Email_Validation_and_Verification_Cheat_Sheet",
+          "Error_Handling_Cheat_Sheet",
+          "FastAPI_Security_Cheat_Sheet",
+          "File_Upload_Cheat_Sheet",
+          "Forgot_Password_Cheat_Sheet",
+          "GitHub_Actions_Security_Cheat_Sheet",
+          "GraphQL_Cheat_Sheet",
+          "HTML5_Security_Cheat_Sheet",
+          "HTTP_Headers_Cheat_Sheet",
+          "HTTP_Strict_Transport_Security_Cheat_Sheet",
+          "Identity_Propagation_Patterns_Cheat_Sheet",
+          "Infrastructure_as_Code_Security_Cheat_Sheet",
+          "Injection_Prevention_Cheat_Sheet",
+          "Injection_Prevention_in_Java_Cheat_Sheet",
+          "Input_Validation_Cheat_Sheet",
+          "Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet",
+          "JAAS_Cheat_Sheet",
+          "JSON_Web_Token_Cheat_Sheet",
+          "JavaScript_and_TypeScript_Security_Cheat_Sheet",
+          "Java_Security_Cheat_Sheet",
+          "Key_Management_Cheat_Sheet",
+          "Kubernetes_Security_Cheat_Sheet",
+          "LDAP_Injection_Prevention_Cheat_Sheet",
+          "LLM_Prompt_Injection_Prevention_Cheat_Sheet",
+          "Laravel_Cheat_Sheet",
+          "Legacy_Application_Management_Cheat_Sheet",
+          "Logging_Cheat_Sheet",
+          "Logging_Vocabulary_Cheat_Sheet",
+          "MCP_Security_Cheat_Sheet",
+          "Mass_Assignment_Cheat_Sheet",
+          "Micro_Frontend_Security_Cheat_Sheet",
+          "Microservices_Security_Cheat_Sheet",
+          "Microservices_based_Security_Arch_Doc_Cheat_Sheet",
+          "Mobile_Application_Security_Cheat_Sheet",
+          "Multi_Tenant_Security_Cheat_Sheet",
+          "Multifactor_Authentication_Cheat_Sheet",
+          "NPM_Security_Cheat_Sheet",
+          "Network_Segmentation_Cheat_Sheet",
+          "Nextjs_Security_Cheat_Sheet",
+          "NoSQL_Security_Cheat_Sheet",
+          "NodeJS_Docker_Cheat_Sheet",
+          "Nodejs_Security_Cheat_Sheet",
+          "OAuth2_Cheat_Sheet",
+          "OS_Command_Injection_Defense_Cheat_Sheet",
+          "PHP_Configuration_Cheat_Sheet",
+          "Passkey_Security_Cheat_Sheet",
+          "Password_Storage_Cheat_Sheet",
+          "Path_Traversal_Prevention_Cheat_Sheet",
+          "Pinning_Cheat_Sheet",
+          "Post_Quantum_Cryptography_Cheat_Sheet",
+          "Prototype_Pollution_Prevention_Cheat_Sheet",
+          "Query_Parameterization_Cheat_Sheet",
+          "RAG_Security_Cheat_Sheet",
+          "REST_Assessment_Cheat_Sheet",
+          "REST_Security_Cheat_Sheet",
+          "Ruby_on_Rails_Cheat_Sheet",
+          "SAML_Security_Cheat_Sheet",
+          "SQL_Injection_Prevention_Cheat_Sheet",
+          "Secrets_Management_Cheat_Sheet",
+          "Secure_AI_Model_Ops_Cheat_Sheet",
+          "Secure_Cloud_Architecture_Cheat_Sheet",
+          "Secure_Code_Review_Cheat_Sheet",
+          "Secure_Coding_with_AI_Cheat_Sheet",
+          "Secure_Product_Design_Cheat_Sheet",
+          "Security_Terminology_Cheat_Sheet",
+          "Server_Side_Request_Forgery_Prevention_Cheat_Sheet",
+          "Server_Side_Template_Injection_Prevention_Cheat_Sheet",
+          "Serverless_FaaS_Security_Cheat_Sheet",
+          "Session_Management_Cheat_Sheet",
+          "Software_Supply_Chain_Security_Cheat_Sheet",
+          "Subdomain_Takeover_Prevention_Cheat_Sheet",
+          "Symfony_Cheat_Sheet",
+          "TLS_Cipher_String_Cheat_Sheet",
+          "Third_Party_Javascript_Management_Cheat_Sheet",
+          "Third_Party_Payment_Gateway_Integration_Cheat_Sheet",
+          "Threat_Modeling_Cheat_Sheet",
+          "Transaction_Authorization_Cheat_Sheet",
+          "Transport_Layer_Protection_Cheat_Sheet",
+          "Transport_Layer_Security_Cheat_Sheet",
+          "Unvalidated_Redirects_and_Forwards_Cheat_Sheet",
+          "User_Privacy_Protection_Cheat_Sheet",
+          "Verifying_Third_Party_Agent_Execution_Evidence_Cheat_Sheet",
+          "Virtual_Patching_Cheat_Sheet",
+          "Vulnerability_Disclosure_Cheat_Sheet",
+          "Vulnerable_Dependency_Management_Cheat_Sheet",
+          "WebSocket_Security_Cheat_Sheet",
+          "Web_Cache_Security_Cheat_Sheet",
+          "Web_Frontend_Security_Cheat_Sheet",
+          "Web_Service_Security_Cheat_Sheet",
+          "Webhook_Security_Cheat_Sheet",
+          "Workload_Identity_Federation_Cheat_Sheet",
+          "XML_External_Entity_Prevention_Cheat_Sheet",
+          "XML_Security_Cheat_Sheet",
+          "XPath_Injection_Prevention_Cheat_Sheet",
+          "XSS_Filter_Evasion_Cheat_Sheet",
+          "XS_Leaks_Cheat_Sheet",
+          "Zero_Trust_Architecture_Cheat_Sheet",
+          "gRPC_Security_Cheat_Sheet"
+        ]
+      },
+      "confirmed_on": "2026-10-12",
+      "confirmed_basis": "introduced",
+      "check": {
+        "method": "github_dir",
+        "url": "https://api.github.com/repos/OWASP/CheatSheetSeries/contents/cheatsheets",
+        "page": "https://cheatsheetseries.owasp.org/"
+      },
+      "affects": [
+        {
+          "file": "references/sources/owasp-cheatsheets.md",
+          "categories": [],
+          "scope": "カテゴリ→Cheat Sheet名の対応表"
+        },
+        {
+          "file": "references/checklists/principles.md",
+          "categories": [
+            "1 入力値検証",
+            "2 認証",
+            "3 セッション管理",
+            "4 アクセス制御・認可",
+            "5 データベース",
+            "6 暗号・秘密情報管理",
+            "8 通信・セキュリティ設定",
+            "9 ファイルアップロード・ファイル操作",
+            "10 依存関係管理"
+          ],
+          "scope": "各カテゴリの「参照:」行のCheat Sheet名"
+        }
+      ],
+      "known_issues": [],
+      "note": "Cheat Sheet Seriesに版番号は無いため、adoptedは確認時点の一覧（adopted_detail.sheets。cheatsheets/ の *_Cheat_Sheet.md の名前から接尾辞を除いたもの。139件）。一覧は2026-10-12の取得結果を記録し、2026-11-23に check_sources.py の差分（追加: CORS Security、Path Traversal Prevention）を公式索引（139件）と照らして一覧を更新した（ツールによる確認で、ユーザーが確認した日ではないため confirmed_on は導入日のまま）。referenced は references/sources/owasp-cheatsheets.md の対応表に載るシート名と、対応するファイル名（無ければ null）。"
+    },
+    "ism": {
+      "title": "ISM（Information Security Manual）Guidelines for Database Systems",
+      "adopted": "2026-09",
+      "adopted_text": "2026-09版",
+      "adopted_in": "references/checklists/database/_index.md",
+      "confirmed_on": "2026-11-07",
+      "confirmed_basis": "human",
+      "check": {
+        "method": "manual",
+        "url": "https://www.cyber.gov.au/ism/2026-09/guidelines-for-database-systems",
+        "page": "https://www.cyber.gov.au/ism"
+      },
+      "affects": [
+        {
+          "file": "references/checklists/database/_index.md",
+          "categories": [
+            "5 データベース"
+          ],
+          "scope": "表の「根拠」列のISM管理策ID"
+        },
+        {
+          "file": "references/checklists/database/access.md",
+          "categories": [
+            "5 データベース"
+          ],
+          "scope": "表の「根拠」列のISM管理策ID"
+        },
+        {
+          "file": "references/checklists/database/data-protection.md",
+          "categories": [
+            "5 データベース"
+          ],
+          "scope": "表の「根拠」列のISM管理策ID"
+        },
+        {
+          "file": "references/checklists/database/network-tls.md",
+          "categories": [
+            "5 データベース"
+          ],
+          "scope": "表の「根拠」列のISM管理策ID"
+        },
+        {
+          "file": "references/checklists/database/logging.md",
+          "categories": [
+            "5 データベース"
+          ],
+          "scope": "表の「根拠」列のISM管理策ID"
+        },
+        {
+          "file": "references/checklists/database/ops-requests.md",
+          "categories": [
+            "5 データベース"
+          ],
+          "scope": "表の「根拠」列のISM管理策ID"
+        }
+      ],
+      "note": "P0（2026-11-07）に公式ページを人が閲覧して確認した。自動取得はタイムアウトしたため method は manual（取得せず「確認できず」とする）。版を上げるときは dev/tools/check_ism_controls.py の PINNED と dev/p0/ism-database-controls.json も直す。"
+    }
+  }
+}

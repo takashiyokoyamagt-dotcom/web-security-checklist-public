@@ -1,0 +1,12 @@
+{
+  "name": "gen-target-app",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Empty-ish Express scaffold used as the target repo for the web-security-checklist skill's mode-1 (code generation) eval.",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "dependencies": {
+    "express": "^4.17.1",
+    "sqlite3": "^5.0.2"
+  }
+}

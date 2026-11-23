@@ -1,0 +1,830 @@
+{
+  "schema_version": 1,
+  "skill": {
+    "name": "web-security-checklist",
+    "version": "2.0.0",
+    "version_note": "first numbered release (improvement plan P0-P7; CHANGELOG.md at the repository root). copilot and gh-aw adapters are unverified templates"
+  },
+  "conditions": {
+    "M1-DB": {
+      "source": "SKILL.md",
+      "text": "データベースを"
+    },
+    "M1-SCA": {
+      "source": "SKILL.md",
+      "text": "依存関係チェックが必要な場合"
+    },
+    "M1-LANG": {
+      "source": "SKILL.md",
+      "text": "references/lang/*.md"
+    },
+    "M1-COMMON": {
+      "source": "SKILL.md",
+      "text": "迷ったとき"
+    },
+    "M2-A": {
+      "source": "SKILL.md",
+      "text": "該当カテゴリが5個以上"
+    },
+    "M2-B": {
+      "source": "SKILL.md",
+      "text": "レポートのファイル保存を求められた"
+    },
+    "M2-C": {
+      "source": "SKILL.md",
+      "text": "出典別ファイルの追加保存を求められた"
+    },
+    "M2-D": {
+      "source": "SKILL.md",
+      "text": "設計書の候補を手順1で1回だけ探し"
+    },
+    "G2-CAND": {
+      "source": "references/modes/mode3-full-audit.md",
+      "text": "1件でもあれば"
+    },
+    "ROLE-FIELDS-PASSED": {
+      "source": "references/pipeline/finding-final.md",
+      "text": "design-fields.md`を渡したとき"
+    },
+    "R1-DB": {
+      "source": "references/modes/mode3-full-audit.md",
+      "text": "DB関連なら"
+    },
+    "R1-LANG": {
+      "source": "references/modes/mode3-full-audit.md",
+      "text": "検出した`lang/*.md`"
+    },
+    "R1-DEP": {
+      "source": "references/modes/mode3-full-audit.md",
+      "text": "依存関係管理カテゴリでは"
+    },
+    "RB-NEEDED": {
+      "source": "references/pipeline/finding-pipeline.md",
+      "text": "必要なら references/checklists/database/_index.md"
+    }
+  },
+  "modes": {
+    "1": {
+      "steps": [
+        {
+          "name": "skill",
+          "required": [
+            "SKILL.md"
+          ],
+          "conditional": [],
+          "gate": null,
+          "gate_token": null
+        },
+        {
+          "name": "principles",
+          "required": [
+            "references/checklists/principles.md"
+          ],
+          "conditional": [],
+          "gate": null,
+          "gate_token": null
+        },
+        {
+          "name": "conditional",
+          "required": [],
+          "conditional": [
+            {
+              "file": "references/checklists/database/_index.md",
+              "condition_id": "M1-DB"
+            },
+            {
+              "file": "references/checklists/database/sqli.md",
+              "condition_id": "M1-DB"
+            },
+            {
+              "file": "references/checklists/database/access.md",
+              "condition_id": "M1-DB"
+            },
+            {
+              "file": "references/checklists/database/data-protection.md",
+              "condition_id": "M1-DB"
+            },
+            {
+              "file": "references/checklists/database/network-tls.md",
+              "condition_id": "M1-DB"
+            },
+            {
+              "file": "references/checklists/database/logging.md",
+              "condition_id": "M1-DB"
+            },
+            {
+              "file": "references/checklists/dependency-sca.md",
+              "condition_id": "M1-SCA"
+            },
+            {
+              "file": "references/lang/*.md",
+              "condition_id": "M1-LANG"
+            },
+            {
+              "file": "references/core/common-principles.md",
+              "condition_id": "M1-COMMON"
+            }
+          ],
+          "gate": null,
+          "gate_token": null
+        }
+      ]
+    },
+    "2": {
+      "steps": [
+        {
+          "name": "skill",
+          "required": [
+            "SKILL.md"
+          ],
+          "conditional": [],
+          "gate": null,
+          "gate_token": null
+        },
+        {
+          "name": "principles",
+          "required": [
+            "references/checklists/principles.md"
+          ],
+          "conditional": [],
+          "gate": null,
+          "gate_token": null
+        },
+        {
+          "name": "required6",
+          "required": [
+            "references/modes/mode2-audit-review.md",
+            "references/pipeline/finding-pipeline.md",
+            "references/pipeline/fix-audit-strictness.md",
+            "references/cvss/cvss.md",
+            "references/core/common-principles.md",
+            "references/core/agent-roles.md"
+          ],
+          "conditional": [],
+          "gate": null,
+          "gate_token": null
+        },
+        {
+          "name": "conditional",
+          "required": [],
+          "conditional": [
+            {
+              "file": "references/modes/mode3-full-audit.md",
+              "condition_id": "M2-A"
+            },
+            {
+              "file": "references/modes/mode3-report.md",
+              "condition_id": "M2-B"
+            },
+            {
+              "file": "references/modes/mode3-html.md",
+              "condition_id": "M2-C"
+            },
+            {
+              "file": "references/modes/mode3-by-source.md",
+              "condition_id": "M2-C"
+            },
+            {
+              "file": "assets/templates/report_template_by_source.md",
+              "condition_id": "M2-C"
+            },
+            {
+              "file": "references/design/design-intent.md",
+              "condition_id": "M2-D"
+            }
+          ],
+          "gate": null,
+          "gate_token": null
+        },
+        {
+          "name": "M4",
+          "required": [
+            "references/pipeline/finding-arbiter.md",
+            "references/pipeline/finding-final.md",
+            "references/cvss/cvss-scoring.md"
+          ],
+          "conditional": [],
+          "gate": "M4",
+          "gate_token": [
+            {
+              "id": "G3A",
+              "file": "references/pipeline/finding-arbiter.md",
+              "value": "G3A-9e018b"
+            },
+            {
+              "id": "G3F",
+              "file": "references/pipeline/finding-final.md",
+              "value": "G3F-4b7e2c"
+            },
+            {
+              "id": "G3B",
+              "file": "references/cvss/cvss-scoring.md",
+              "value": "G3B-d3e31e"
+            }
+          ]
+        }
+      ]
+    },
+    "3": {
+      "steps": [
+        {
+          "name": "G0",
+          "required": [
+            "SKILL.md",
+            "references/modes/mode3-full-audit.md",
+            "references/pipeline/finding-pipeline.md",
+            "references/pipeline/fix-audit-strictness.md",
+            "references/cvss/cvss.md",
+            "references/core/common-principles.md"
+          ],
+          "conditional": [],
+          "gate": "G0",
+          "gate_token": null
+        },
+        {
+          "name": "R1",
+          "required": [],
+          "conditional": [],
+          "gate": "R1",
+          "gate_token": null
+        },
+        {
+          "name": "G1",
+          "required": [
+            "references/core/agent-roles.md",
+            "references/core/handoff-files.md"
+          ],
+          "conditional": [],
+          "gate": "G1",
+          "gate_token": [
+            {
+              "id": "G1",
+              "file": "references/core/agent-roles.md",
+              "value": "G1-7c41d9"
+            }
+          ]
+        },
+        {
+          "name": "G2",
+          "required": [],
+          "conditional": [
+            {
+              "file": "references/design/design-intent.md",
+              "condition_id": "G2-CAND"
+            }
+          ],
+          "gate": "G2",
+          "gate_token": [
+            {
+              "id": "G2",
+              "file": "references/design/design-intent.md",
+              "value": "G2-0092ba"
+            }
+          ]
+        },
+        {
+          "name": "G3",
+          "required": [
+            "references/pipeline/finding-arbiter.md",
+            "references/pipeline/finding-final.md",
+            "references/cvss/cvss-scoring.md",
+            "references/checklists/principles.md",
+            "references/sources/ipa-secure-website.md",
+            "references/sources/cwe-top25.md",
+            "references/sources/owasp-cheatsheets.md",
+            "references/checklists/dependency-sca.md"
+          ],
+          "conditional": [],
+          "gate": "G3",
+          "gate_token": [
+            {
+              "id": "G3A",
+              "file": "references/pipeline/finding-arbiter.md",
+              "value": "G3A-9e018b"
+            },
+            {
+              "id": "G3F",
+              "file": "references/pipeline/finding-final.md",
+              "value": "G3F-4b7e2c"
+            },
+            {
+              "id": "G3B",
+              "file": "references/cvss/cvss-scoring.md",
+              "value": "G3B-d3e31e"
+            }
+          ]
+        },
+        {
+          "name": "G5",
+          "required": [
+            "references/modes/mode3-report.md",
+            "assets/templates/report_template.md"
+          ],
+          "conditional": [],
+          "gate": "G5",
+          "gate_token": [
+            {
+              "id": "G5",
+              "file": "references/modes/mode3-report.md",
+              "value": "G5-12e8fa"
+            }
+          ]
+        },
+        {
+          "name": "G6",
+          "required": [
+            "references/modes/mode3-html.md"
+          ],
+          "conditional": [],
+          "gate": "G6",
+          "gate_token": [
+            {
+              "id": "G6",
+              "file": "references/modes/mode3-html.md",
+              "value": "G6-a54483"
+            }
+          ]
+        },
+        {
+          "name": "G7",
+          "required": [
+            "references/modes/mode3-by-source.md",
+            "assets/templates/report_template_by_source.md"
+          ],
+          "conditional": [],
+          "gate": "G7",
+          "gate_token": [
+            {
+              "id": "G7",
+              "file": "references/modes/mode3-by-source.md",
+              "value": "G7-c0eee4"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "roles": {
+    "RED": {
+      "reads": [
+        {
+          "file": "references/checklists/principles.md",
+          "condition_id": null,
+          "scope": "section",
+          "section_bytes": null
+        },
+        {
+          "file": "references/checklists/database/_index.md",
+          "condition_id": "R1-DB",
+          "scope": "full"
+        },
+        {
+          "file": "references/checklists/database/sqli.md",
+          "condition_id": "R1-DB",
+          "scope": "full"
+        },
+        {
+          "file": "references/checklists/database/access.md",
+          "condition_id": "R1-DB",
+          "scope": "full"
+        },
+        {
+          "file": "references/checklists/database/data-protection.md",
+          "condition_id": "R1-DB",
+          "scope": "full"
+        },
+        {
+          "file": "references/checklists/database/network-tls.md",
+          "condition_id": "R1-DB",
+          "scope": "full"
+        },
+        {
+          "file": "references/checklists/database/logging.md",
+          "condition_id": "R1-DB",
+          "scope": "full"
+        },
+        {
+          "file": "references/sources/cwe-top25.md",
+          "condition_id": "RB-NEEDED",
+          "scope": "full"
+        },
+        {
+          "file": "references/sources/owasp-cheatsheets.md",
+          "condition_id": "RB-NEEDED",
+          "scope": "full"
+        },
+        {
+          "file": "references/lang/*.md",
+          "condition_id": "R1-LANG",
+          "scope": "full"
+        },
+        {
+          "file": "references/checklists/dependency-sca.md",
+          "condition_id": "R1-DEP",
+          "scope": "full"
+        },
+        {
+          "file": "references/design/design-fields.md",
+          "condition_id": "ROLE-FIELDS-PASSED",
+          "scope": "full"
+        }
+      ],
+      "source": "references/pipeline/finding-pipeline.md Red skeleton (reference standards line); references/modes/mode3-full-audit.md R1 (paths passed, subagent reads them); design-fields.md per finding-final.md. principles.md is a section read, whole file budgeted"
+    },
+    "BLUE": {
+      "reads": [
+        {
+          "file": "references/checklists/principles.md",
+          "condition_id": null,
+          "scope": "section",
+          "section_bytes": null
+        },
+        {
+          "file": "references/checklists/database/_index.md",
+          "condition_id": "R1-DB",
+          "scope": "full"
+        },
+        {
+          "file": "references/checklists/database/sqli.md",
+          "condition_id": "R1-DB",
+          "scope": "full"
+        },
+        {
+          "file": "references/checklists/database/access.md",
+          "condition_id": "R1-DB",
+          "scope": "full"
+        },
+        {
+          "file": "references/checklists/database/data-protection.md",
+          "condition_id": "R1-DB",
+          "scope": "full"
+        },
+        {
+          "file": "references/checklists/database/network-tls.md",
+          "condition_id": "R1-DB",
+          "scope": "full"
+        },
+        {
+          "file": "references/checklists/database/logging.md",
+          "condition_id": "R1-DB",
+          "scope": "full"
+        },
+        {
+          "file": "references/sources/cwe-top25.md",
+          "condition_id": "RB-NEEDED",
+          "scope": "full"
+        },
+        {
+          "file": "references/sources/owasp-cheatsheets.md",
+          "condition_id": "RB-NEEDED",
+          "scope": "full"
+        },
+        {
+          "file": "references/lang/*.md",
+          "condition_id": "R1-LANG",
+          "scope": "full"
+        },
+        {
+          "file": "references/checklists/dependency-sca.md",
+          "condition_id": "R1-DEP",
+          "scope": "full"
+        },
+        {
+          "file": "references/design/design-fields.md",
+          "condition_id": "ROLE-FIELDS-PASSED",
+          "scope": "full"
+        }
+      ],
+      "source": "references/pipeline/finding-pipeline.md Red skeleton (reference standards line); references/modes/mode3-full-audit.md R1 (paths passed, subagent reads them); design-fields.md per finding-final.md. principles.md is a section read, whole file budgeted"
+    },
+    "AUDIT5E": {
+      "reads": [
+        {
+          "file": "references/design/design-audit.md",
+          "condition_id": null,
+          "scope": "full"
+        },
+        {
+          "file": "references/design/design-fields.md",
+          "condition_id": null,
+          "scope": "full"
+        }
+      ],
+      "source": "references/design/design-audit.md header: reader is AUDIT5E; compat_class definition in design-fields.md"
+    },
+    "P7-AUDIT": {
+      "reads": [
+        {
+          "file": "references/design/design-integrated.md",
+          "condition_id": null,
+          "scope": "full"
+        }
+      ],
+      "source": "references/core/agent-roles.md role table row P7-AUDIT",
+      "unverified": true,
+      "reason": "the table states only design-integrated.md; whether design-audit.md/design-fields.md are also read is not stated"
+    },
+    "WRITER": {
+      "reads": [
+        {
+          "file": "references/pipeline/finding-final.md",
+          "condition_id": null,
+          "scope": "full"
+        },
+        {
+          "file": "references/cvss/cvss-scoring.md",
+          "condition_id": null,
+          "scope": "full"
+        },
+        {
+          "file": "assets/templates/report_template.md",
+          "condition_id": null,
+          "scope": "full"
+        }
+      ],
+      "source": "references/modes/mode3-full-audit.md (5d/6 and vector delegation sentence)",
+      "unverified": true,
+      "reason": "agent-roles.md gives no reads for either role; mode3-full-audit.md says once that when 5d/6 writing or vector judgement is delegated the prompt gets the finding-final.md 5d, cvss-scoring.md and report_template.md section 6 paths, and finding-final.md 5d supplement names WRITER and CVSS-JUDGE together. No per-role split is stated, so the union is an upper bound for each. finding-final.md holds 5d-5f (split from finding-arbiter.md in P6 pass 2)"
+    },
+    "CVSS-JUDGE": {
+      "reads": [
+        {
+          "file": "references/pipeline/finding-final.md",
+          "condition_id": null,
+          "scope": "full"
+        },
+        {
+          "file": "references/cvss/cvss-scoring.md",
+          "condition_id": null,
+          "scope": "full"
+        },
+        {
+          "file": "assets/templates/report_template.md",
+          "condition_id": null,
+          "scope": "full"
+        }
+      ],
+      "source": "references/modes/mode3-full-audit.md (5d/6 and vector delegation sentence)",
+      "unverified": true,
+      "reason": "agent-roles.md gives no reads for either role; mode3-full-audit.md says once that when 5d/6 writing or vector judgement is delegated the prompt gets the finding-final.md 5d, cvss-scoring.md and report_template.md section 6 paths, and finding-final.md 5d supplement names WRITER and CVSS-JUDGE together. No per-role split is stated, so the union is an upper bound for each. finding-final.md holds 5d-5f (split from finding-arbiter.md in P6 pass 2)"
+    },
+    "DESIGN": {
+      "reads": [],
+      "source": "references/design/design-intent.md section 1",
+      "unverified": true,
+      "reason": "design-intent.md section 1 and the agent-roles.md table row define the DESIGN task (list candidates with find/ls, extract key points, grep for injected instructions) but neither states that the DESIGN agent itself reads design-intent.md or any other skill file; it reads the target repository's design documents, which are not skill files"
+    },
+    "BUILDER": {
+      "reads": [
+        {
+          "file": "references/design/design-integrated.md",
+          "condition_id": null,
+          "scope": "full"
+        }
+      ],
+      "source": "references/core/agent-roles.md BUILDER additional reads"
+    },
+    "SYNTH": {
+      "reads": [
+        {
+          "file": "references/design/design-fields.md",
+          "condition_id": null,
+          "scope": "full"
+        },
+        {
+          "file": "references/pipeline/finding-arbiter.md",
+          "condition_id": null,
+          "scope": "full"
+        }
+      ],
+      "source": "references/core/agent-roles.md SYNTH bullet (5b supplement 3 is a section of finding-arbiter.md; whole file counted)"
+    },
+    "SCA-SYNTH": {
+      "reads": [
+        {
+          "file": "references/checklists/dependency-sca.md",
+          "condition_id": null,
+          "scope": "full"
+        },
+        {
+          "file": "references/design/design-fields.md",
+          "condition_id": null,
+          "scope": "full"
+        }
+      ],
+      "source": "references/core/agent-roles.md SCA-SYNTH bullet"
+    },
+    "MECH": {
+      "reads": [],
+      "source": "references/core/agent-roles.md role table",
+      "unverified": true,
+      "reason": "agent-roles.md and finding-pipeline.md state no reference-file reads for this role; nothing inferred"
+    },
+    "SCA-RUN": {
+      "reads": [],
+      "source": "references/core/agent-roles.md role table",
+      "unverified": true,
+      "reason": "agent-roles.md and finding-pipeline.md state no reference-file reads for this role; nothing inferred"
+    }
+  },
+  "budgets": {
+    "orchestrator": {
+      "mode1": {
+        "basis": "required",
+        "bytes": 29787
+      },
+      "mode2": {
+        "basis": "required",
+        "bytes": 86416
+      },
+      "mode2:M4": {
+        "basis": "required",
+        "bytes": 170484
+      },
+      "mode3:G0": {
+        "basis": "required",
+        "bytes": 62940
+      },
+      "mode3:R1": {
+        "basis": "required",
+        "bytes": 62940
+      },
+      "mode3:G1": {
+        "basis": "required",
+        "bytes": 86856
+      },
+      "mode3:G2": {
+        "basis": "required",
+        "bytes": 86856
+      },
+      "mode3:G3": {
+        "basis": "required",
+        "bytes": 205955
+      },
+      "mode3:G5": {
+        "basis": "required",
+        "bytes": 262657
+      },
+      "mode3:G6": {
+        "basis": "required",
+        "bytes": 275486
+      },
+      "mode3:G7": {
+        "basis": "required",
+        "bytes": 294609
+      }
+    },
+    "roles": {
+      "RED": {
+        "basis": "worst",
+        "bytes": 55557
+      },
+      "BLUE": {
+        "basis": "worst",
+        "bytes": 55557
+      },
+      "AUDIT5E": {
+        "basis": "worst",
+        "bytes": 15927
+      },
+      "P7-AUDIT": {
+        "basis": "worst",
+        "bytes": 8905
+      },
+      "WRITER": {
+        "basis": "worst",
+        "bytes": 90058
+      },
+      "CVSS-JUDGE": {
+        "basis": "worst",
+        "bytes": 90058
+      },
+      "DESIGN": {
+        "basis": "worst",
+        "bytes": 0
+      },
+      "BUILDER": {
+        "basis": "worst",
+        "bytes": 8905
+      },
+      "SYNTH": {
+        "basis": "worst",
+        "bytes": 38221
+      },
+      "SCA-SYNTH": {
+        "basis": "worst",
+        "bytes": 15535
+      },
+      "MECH": {
+        "basis": "worst",
+        "bytes": 0
+      },
+      "SCA-RUN": {
+        "basis": "worst",
+        "bytes": 0
+      }
+    }
+  },
+  "budget_policy": "Each budget equals the measured value within MARGIN bytes (check_read_budget.py, 16) and must not exceed scripts/read-budget-baseline.json; a larger value needs raised_reason {date, approver, text} and prints a WARN. Role budgets are worst case (required + conditional files, whole files; lang/*.md counts the largest file).",
+  "environments": {
+    "claude-code": {
+      "adapter": "adapters/claude-code/",
+      "capabilities": {
+        "ask_user": {
+          "available": true,
+          "evidence": "SKILL.md: AskUserQuestion for mode selection"
+        },
+        "subagents": {
+          "available": true,
+          "evidence": "SKILL.md/agent-roles.md: Agent delegation"
+        },
+        "shell": {
+          "available": true,
+          "evidence": "agent-roles.md: shell command permissions per role"
+        },
+        "file_write": {
+          "available": true,
+          "evidence": "mode3 persists findings and reports to files"
+        },
+        "artifact": {
+          "available": true,
+          "evidence": "SKILL.md step 6: HTML Artifact"
+        },
+        "network": {
+          "available": true,
+          "evidence": "agent-roles.md: SCA-RUN network, fetch_epss_kev.py"
+        }
+      }
+    },
+    "copilot": {
+      "adapter": "adapters/copilot/",
+      "unverified": true,
+      "reason": "templates built from official docs only; not run in VS Code or github.com (P8 real-environment evaluation pending)",
+      "scope": {
+        "vscode": "mode 1 and simple check (Agent Skills, .github/skills/); mode 2 only after real check; mode 3 not offered",
+        "github-com": "advice and code-generation check only, labelled simple check (.github/copilot-instructions.md); no scripts, no CVSS; mode 2/3 not offered"
+      },
+      "capabilities": {
+        "ask_user": {
+          "available": true,
+          "evidence": "plain chat question (no AskUserQuestion tool); unverified"
+        },
+        "subagents": {
+          "available": null,
+          "evidence": "VS Code: skill context fork is experimental; Red/Blue isolation unverified. github.com Chat: not documented. dev/p8/adapters-20261122.md (official docs checked 2026-11-22)"
+        },
+        "shell": {
+          "available": null,
+          "evidence": "VS Code agent mode terminal with approval (unverified); github.com Chat: assumed unavailable"
+        },
+        "file_write": {
+          "available": null,
+          "evidence": "not used by the adapters"
+        },
+        "artifact": {
+          "available": false,
+          "evidence": "no HTML Artifact; mode 3 not offered"
+        },
+        "network": {
+          "available": null,
+          "evidence": "not used by the adapters"
+        }
+      }
+    },
+    "gh-aw": {
+      "adapter": "adapters/gh-aw/",
+      "unverified": true,
+      "reason": "workflow files built from official gh-aw docs only; not compiled or run (P9: auth, runtime, cost, PR review quality, prompt-injection tests pending)",
+      "scope": {
+        "pr-review": "pull_request trigger, read-only agent job, safe-outputs review comments (COMMENT only)",
+        "full-audit": "workflow_dispatch only, trial; not treated as mode 3 until subagent isolation is confirmed"
+      },
+      "capabilities": {
+        "ask_user": {
+          "available": false,
+          "evidence": "non-interactive Actions run"
+        },
+        "subagents": {
+          "available": null,
+          "evidence": "not confirmed for the Copilot engine; dev/p8/adapters-20261122.md (official docs checked 2026-11-22)"
+        },
+        "shell": {
+          "available": true,
+          "evidence": "tools.bash allowlist (read-only commands only in the templates)"
+        },
+        "file_write": {
+          "available": false,
+          "evidence": "agent job read-only; writes only through safe-outputs"
+        },
+        "artifact": {
+          "available": false,
+          "evidence": "output is PR review comments or one issue/PR comment"
+        },
+        "network": {
+          "available": null,
+          "evidence": "firewall allowlist; not used by the templates"
+        }
+      }
+    }
+  }
+}

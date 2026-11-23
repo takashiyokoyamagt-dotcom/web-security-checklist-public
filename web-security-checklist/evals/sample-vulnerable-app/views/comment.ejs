@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head><title>Comments</title></head>
+<body>
+  <ul>
+    <% comments.forEach(function(comment) { %>
+      <!-- 【意図的な脆弱性】<%- %> は非エスケープ出力。ユーザー入力をそのままHTMLに埋め込んでいる -->
+      <li><%- comment.body %></li>
+    <% }); %>
+  </ul>
+</body>
+</html>

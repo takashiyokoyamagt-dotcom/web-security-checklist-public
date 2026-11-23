@@ -1,0 +1,9 @@
+# scripts/calculate_cvss.py が依存するPythonパッケージ。
+# `pip3 install -r scripts/requirements-cvss.txt` で導入する。
+#
+# バージョン3.6でCVSS v4.0公式検証用ベクター集
+# （https://github.com/FIRSTdotorg/cvss-resources vectorFiles/reference-vectors、
+# 全66,331件）による検証を行い、Baseメトリクスのみの場合で99.5%以上が一致することを確認済み
+# （詳細はdocs/HISTORY.md参照）。別バージョンを使う場合は
+# `python3 scripts/calculate_cvss.py --self-test` で既知ベクターとの整合を再確認すること。
+cvss==3.6

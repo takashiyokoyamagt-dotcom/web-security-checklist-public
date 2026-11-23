@@ -1,0 +1,3 @@
+# 意図的に脆弱な評価用サンプルアプリの JS は整形対象外(評価の入力そのもの。過去の監査レポートが file:line で参照している)。
+**/evals/sample-vulnerable-app/**/*.js
+**/evals/mini-vulnerable-app/**/*.js

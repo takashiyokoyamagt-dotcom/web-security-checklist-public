@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>/*TITLE*/</title>
+<style>
+:root{
+  --paper:#FFFFFF; --surface:#F7F8FA; --ink:#1A1D24; --ink-dim:#5B6270;
+  --line:#333333; --line-soft:#C7CBD3;
+  --accent:#1C3A5E; --accent-ink:#14283F;
+  --critical:#7A2020; --critical-bg:#FBEAEA;
+  --high:#7A4A12; --high-bg:#FBF0E2;
+  --medium:#6B5A10; --medium-bg:#FAF4DC;
+  --low:#1F4E73; --low-bg:#E7EFF6;
+  --plausible:#4B5563; --plausible-bg:#ECEEF1;
+  --confirmed-text:#1C4A30; --confirmed-bg:#E4F0E8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#14161B; --surface:#1B1E25; --ink:#E7E9EE; --ink-dim:#A3A8B4;
+    --line:#3A3F4A; --line-soft:#2A2E37;
+    --accent:#9DB4D4; --accent-ink:#C3D2E8;
+    --critical:#E6A0A0; --critical-bg:#3A1E1E;
+    --high:#E0B27A; --high-bg:#3A2C15;
+    --medium:#D8C578; --medium-bg:#332C10;
+    --low:#8FB6DC; --low-bg:#182B3D;
+    --plausible:#B6BEC9; --plausible-bg:#262A30;
+    --confirmed-text:#8FCBA6; --confirmed-bg:#122A1C;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14161B; --surface:#1B1E25; --ink:#E7E9EE; --ink-dim:#A3A8B4;
+  --line:#3A3F4A; --line-soft:#2A2E37;
+  --accent:#9DB4D4; --accent-ink:#C3D2E8;
+  --critical:#E6A0A0; --critical-bg:#3A1E1E;
+  --high:#E0B27A; --high-bg:#3A2C15;
+  --medium:#D8C578; --medium-bg:#332C10;
+  --low:#8FB6DC; --low-bg:#182B3D;
+  --plausible:#B6BEC9; --plausible-bg:#262A30;
+  --confirmed-text:#8FCBA6; --confirmed-bg:#122A1C;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Hiragino Sans","Yu Gothic UI","Meiryo",system-ui,sans-serif;font-size:15px;line-height:1.7}
+main{max-width:1080px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:24px;color:var(--accent-ink);border-bottom:2px solid var(--accent);padding-bottom:8px;margin:0 0 16px}
+h2{font-size:19px;color:var(--accent-ink);border-bottom:1px solid var(--line-soft);padding-bottom:4px;margin:36px 0 12px}
+h3{font-size:16px;margin:24px 0 8px}
+h4{font-size:14px;margin:16px 0 6px;color:var(--ink-dim)}
+a{color:var(--accent)}
+.tw{overflow-x:auto;margin:8px 0}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{border:1px solid var(--line-soft);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:var(--surface)}
+code{font-family:"SFMono-Regular",Consolas,monospace;font-size:12.5px;background:var(--surface);padding:0 3px;border-radius:2px;word-break:break-all}
+pre{background:var(--surface);border:1px solid var(--line-soft);border-radius:3px;padding:8px;overflow-x:auto;font-size:12.5px;line-height:1.5;font-family:"SFMono-Regular",Consolas,monospace;margin:6px 0}
+.badge{display:inline-block;border:1px solid currentColor;border-radius:3px;padding:0 6px;font-size:12px;margin-right:4px;white-space:nowrap}
+.sev-Critical{color:var(--critical);background:var(--critical-bg)}
+.sev-High{color:var(--high);background:var(--high-bg)}
+.sev-Medium{color:var(--medium);background:var(--medium-bg)}
+.sev-Low{color:var(--low);background:var(--low-bg)}
+.v-PLAUSIBLE{color:var(--plausible);background:var(--plausible-bg)}
+.v-CONFIRMED{color:var(--confirmed-text);background:var(--confirmed-bg)}
+.cvss{color:var(--ink-dim);background:var(--surface)}
+.finding{border:1px solid var(--line-soft);border-radius:3px;padding:12px 14px;margin:14px 0;background:var(--paper)}
+.finding h3{margin-top:0}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 4px}
+.filters button{border:1px solid var(--line-soft);background:var(--surface);color:var(--ink);border-radius:3px;padding:4px 10px;font-size:13px;cursor:pointer}
+.filters button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);font-weight:bold}
+.diff-add{background:var(--confirmed-bg);color:var(--confirmed-text)}
+.diff-del{background:var(--critical-bg);color:var(--critical);text-decoration:line-through;opacity:.85}
+.diff-ctx{opacity:.75}
+details>summary{cursor:pointer;color:var(--accent);margin:6px 0}
+.dim{color:var(--ink-dim);font-size:13px}
+.cover td:first-child{width:28%;background:var(--surface)}
+.toolbar{display:flex;justify-content:flex-end}
+.toolbar button{border:1px solid var(--line-soft);background:var(--surface);color:var(--ink);border-radius:3px;padding:2px 8px;font-size:12px;cursor:pointer}
+@media (max-width:640px){body{font-size:14px} h1{font-size:20px}}
+</style>
+</head>
+<body>
+<main>
+<div class="toolbar"><button id="theme" type="button">表示: 自動</button></div>
+<h1>Webアプリケーション セキュリティ監査報告書</h1>
+<div id="stcover"></div>
+<h2>改訂履歴</h2>
+<div id="strev"></div>
+<h2>目次</h2>
+<ol>
+<li><a href="#s1">エグゼクティブサマリー</a></li><li><a href="#s2">実施メタデータ</a></li><li><a href="#s3">カテゴリ別実施状況</a></li>
+<li><a href="#s4">指摘サマリー</a></li><li><a href="#s5">指摘詳細</a></li><li><a href="#s6">リスク分析（CVSSメトリクス詳細）</a></li>
+<li><a href="#s7">要確認事項（Plausible判定）</a></li><li><a href="#s8">SCA（依存関係脆弱性）スキャン結果</a></li><li><a href="#s9">自己レビュー（見落とし確認）</a></li>
+<li><a href="#s10">次のアクション（推奨優先順位）</a></li><li><a href="#s11">出典別レポート</a></li><li><a href="#s12">本報告書に関する留意事項</a></li>
+</ol>
+<h2 id="s1">1. エグゼクティブサマリー</h2>
+<div id="st1s"></div>
+<div class="tw"><table><thead><tr><th>重大度</th><th>件数</th></tr></thead><tbody id="counts"></tbody></table></div>
+<div id="st1n"></div>
+<h2 id="s2">2. 実施メタデータ</h2><div id="st2"></div>
+<h2 id="s3">3. カテゴリ別実施状況</h2><div id="st3"></div>
+<h2 id="s4">4. 指摘サマリー</h2>
+<div class="filters" id="filters" role="group" aria-label="出典で絞り込む"></div>
+<p class="dim" id="filterNote"></p>
+<div class="tw"><table><thead><tr><th>No.</th><th>重大度</th><th>CVSS v3.1</th><th>CVSS v4.0</th><th>ファイル</th><th>概要</th><th>判定</th></tr></thead><tbody id="sumrows"></tbody></table></div>
+<div id="st4d"></div>
+<h2 id="s5">5. 指摘詳細（重大度順）</h2><div id="details"></div>
+<h2 id="s6">6. リスク分析（CVSSメトリクス詳細）</h2>
+<div id="st6c"></div>
+<div id="risk"></div>
+<h2 id="s7">7. 要確認事項（Plausible判定）</h2><div id="st7"></div>
+<h2 id="s8">8. SCA（依存関係脆弱性）スキャン結果</h2><div id="st8"></div>
+<h2 id="s9">9. 自己レビュー（見落とし確認）</h2><div id="st9"></div>
+<h2 id="s10">10. 次のアクション（推奨優先順位）</h2><div id="st10"></div>
+<h2 id="s11">11. 出典別レポート</h2><div id="st11"></div>
+<h2 id="s12">12. 本報告書に関する留意事項</h2><div id="st12"></div>
+</main>
+<script>
+const FINDINGS = /*FINDINGS*/[];
+const STATIC = /*STATIC*/{};
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function diffHTML(text){
+  return text.split('\n').map(line=>{
+    if(line.startsWith('+') && !line.startsWith('+++')) return `<div class="diff-add">${esc(line)}</div>`;
+    if(line.startsWith('-') && !line.startsWith('---')) return `<div class="diff-del">${esc(line)}</div>`;
+    return `<div class="diff-ctx">${esc(line)}</div>`;
+  }).join('');
+}
+const SEVS = ['Critical','High','Medium','Low'];
+const TABS = [['all','統合'],['IPA','IPA'],['OWASP_ASVS','OWASP ASVS'],['OWASP_CheatSheet','OWASP Cheat Sheet'],['CWE','CWE'],['ISM','ISM'],['SCA','SCA']];
+for (const k of Object.keys(STATIC)) { const el = document.getElementById('st'+k); if (el) el.innerHTML = STATIC[k]; }
+const counts = document.getElementById('counts');
+counts.innerHTML = SEVS.map(s=>`<tr><td><span class="badge sev-${s}">${s}</span></td><td>${FINDINGS.filter(f=>f.cvssV3Severity===s).length}</td></tr>`).join('')
+  + `<tr><td>要確認 (Plausible / Blue Teamで確証に至らず)</td><td>${FINDINGS.filter(f=>f.verdict==='PLAUSIBLE').length}</td></tr>`;
+const sev = f => `<span class="badge sev-${f.cvssV3Severity}">${f.cvssV3Severity}</span>`;
+const ver = f => `<span class="badge v-${f.verdict}">${f.verdict}</span>` + (f.unused ? '<span class="badge v-PLAUSIBLE">未使用・実質問題なし</span>' : '');
+const rows = []; const cards = []; const risks = [];
+for (const f of FINDINGS) {
+  rows.push(`<tr data-n="${f.n}"><td><a href="#f${f.n}">5.${f.n}</a></td><td>${sev(f)}</td><td>${f.v3}</td><td>${f.v4}</td><td><code>${esc(f.files)}</code></td><td>${esc(f.title)}</td><td>${ver(f)}</td></tr>`);
+  const meta = [['ファイル', `<code>${esc(f.files)}</code>`], ['カテゴリ', esc(f.cats + ' (' + f.cwe + ')')], ['判定', ver(f)],
+    ['CVSS v3.1', `${f.v3}（${esc(f.v3sev)}）<br><code>${esc(f.v3vec)}</code>`], ['CVSS v4.0', `${f.v4}（${esc(f.v4sev)}）<br><code>${esc(f.v4vec)}</code>`],
+    ['根拠', esc(f.refs)], ['互換性の区分', esc(f.compat)], ['設計方針との整合', esc(f.design)]];
+  if (f.exploit) meta.push(['悪用状況（EPSS/KEV）', esc(f.exploit)]);
+  const alts = f.alts.length ? `<h4>設計方針に従えない場合の代替案</h4><div class="tw"><table><thead><tr><th>案</th><th>内容</th><th>メリット</th><th>デメリット（互換性・運用・工数・残るリスク）</th><th>デグレの可能性</th><th>推奨度</th></tr></thead><tbody>${f.alts.map(a=>'<tr>'+a.map(c=>`<td>${esc(c)}</td>`).join('')+'</tr>').join('')}</tbody></table></div><p>${esc(f.altsNote)}</p>` : '';
+  const resid = f.residual.length ? `<h4>修正後に残るリスクと別経路</h4><ul>${f.residual.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>` : '';
+  cards.push(`<section class="finding" id="f${f.n}" data-n="${f.n}">
+<h3>5.${f.n} ${sev(f)}<span class="badge cvss">CVSS3.1: ${f.v3}</span><span class="badge cvss">CVSS4.0: ${f.v4}</span> ${esc(f.title)}</h3>
+<div class="tw"><table><tbody>${meta.map(m=>`<tr><th>${m[0]}</th><td>${m[1]}</td></tr>`).join('')}</tbody></table></div>
+<p class="dim"><a href="#r${f.n}">6.${f.n}のリスク分析を見る</a></p>
+<h4>概要</h4><p>${esc(f.summary)}</p>
+<h4>わかりやすい解説（専門知識を前提としない説明）</h4><p>${esc(f.plain)}</p>
+<details><summary>技術的詳細・該当コード・修正案を表示</summary>
+<h4>技術的詳細解説</h4><p>${esc(f.tech)}</p>
+<h4>該当コード</h4><pre>${esc(f.code)}</pre>
+<h4>該当コードの問題点</h4><ul>${f.annot.map(a=>`<li>${esc(a)}</li>`).join('')}</ul>
+<h4>攻撃シナリオ</h4><p>${esc(f.scenario)}</p>
+<h4>推奨される修正</h4><pre class="fix">${diffHTML(f.fix)}</pre>
+<h4>修正内容の解説</h4><p>${esc(f.fixExpl)}</p>
+${resid}
+<h4>元の処理の意図と、修正による挙動の変化</h4><ul><li>元の処理の意図: ${esc(f.intent)}</li><li>修正による挙動の変化: ${esc(f.behavior)}</li></ul>
+${alts}
+<h4>修正案の監査レビュー</h4><div class="tw"><table><tbody><tr><th>検証方式</th><td>${esc(f.audit[0])}</td></tr><tr><th>判定</th><td>${esc(f.audit[1])}</td></tr><tr><th>検証根拠</th><td>${esc(f.audit[2])}</td></tr></tbody></table></div>
+</details></section>`);
+  const mt = rs => `<div class="tw"><table><thead><tr><th>メトリクス</th><th>値</th><th>判定根拠</th></tr></thead><tbody>${rs.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join('')}</tbody></table></div>`;
+  risks.push(`<section class="finding" id="r${f.n}" data-n="${f.n}"><h3>6.${f.n} ${sev(f)} ${esc(f.title)}</h3><p class="dim"><a href="#f${f.n}">5.${f.n}の指摘に戻る</a></p>
+<details><summary>CVSS v3.1 / v4.0 のメトリクス別判定根拠を表示</summary>
+<h4>CVSS v3.1</h4>${mt(f.r3)}<p class="dim">ベクター文字列: <code>${esc(f.v3vec)}</code> ／ ベーススコア: ${f.v3}（${esc(f.v3sev)}）</p>
+<h4>CVSS v4.0</h4>${mt(f.r4)}<p class="dim">ベクター文字列: <code>${esc(f.v4vec)}</code> ／ スコア: ${f.v4}（${esc(f.v4sev)}）</p></details></section>`);
+}
+document.getElementById('sumrows').innerHTML = rows.join('');
+document.getElementById('details').innerHTML = cards.join('');
+document.getElementById('risk').innerHTML = risks.join('');
+const fbox = document.getElementById('filters');
+for (const [key, label] of TABS) {
+  const n = key === 'all' ? FINDINGS.length : FINDINGS.filter(f=>f.types.includes(key)).length;
+  const b = document.createElement('button'); b.type = 'button'; b.dataset.key = key;
+  b.textContent = `${label}（${n}）`; b.setAttribute('aria-pressed', key === 'all' ? 'true' : 'false');
+  if (n === 0) { b.disabled = true; b.textContent = `${label}（該当なし）`; }
+  b.addEventListener('click', () => applyFilter(key)); fbox.appendChild(b);
+}
+function applyFilter(key){
+  for (const b of fbox.querySelectorAll('button')) b.setAttribute('aria-pressed', b.dataset.key === key ? 'true' : 'false');
+  const show = new Set(FINDINGS.filter(f => key === 'all' || f.types.includes(key)).map(f => String(f.n)));
+  for (const el of document.querySelectorAll('[data-n]')) el.hidden = !show.has(el.dataset.n);
+  document.getElementById('filterNote').textContent = key === 'all' ? '' : `表示中: ${show.size}件（4節・5節・6節に適用）`;
+}
+const tb = document.getElementById('theme'); const modes = ['auto','light','dark']; let mi = 0;
+tb.addEventListener('click', () => { mi = (mi + 1) % 3; const m = modes[mi];
+  if (m === 'auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', m);
+  tb.textContent = '表示: ' + ({auto:'自動', light:'ライト', dark:'ダーク'})[m]; });
+</script>
+</body>
+</html>

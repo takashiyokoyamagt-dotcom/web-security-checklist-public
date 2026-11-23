@@ -1,0 +1,102 @@
+{
+  "budgets": {
+    "orchestrator": {
+      "mode1": {
+        "basis": "required",
+        "bytes": 29787
+      },
+      "mode2": {
+        "basis": "required",
+        "bytes": 86416
+      },
+      "mode2:M4": {
+        "basis": "required",
+        "bytes": 170484
+      },
+      "mode3:G0": {
+        "basis": "required",
+        "bytes": 62940
+      },
+      "mode3:G1": {
+        "basis": "required",
+        "bytes": 86856
+      },
+      "mode3:G2": {
+        "basis": "required",
+        "bytes": 86856
+      },
+      "mode3:G3": {
+        "basis": "required",
+        "bytes": 205955
+      },
+      "mode3:G5": {
+        "basis": "required",
+        "bytes": 262657
+      },
+      "mode3:G6": {
+        "basis": "required",
+        "bytes": 275486
+      },
+      "mode3:G7": {
+        "basis": "required",
+        "bytes": 294609
+      },
+      "mode3:R1": {
+        "basis": "required",
+        "bytes": 62940
+      }
+    },
+    "roles": {
+      "AUDIT5E": {
+        "basis": "worst",
+        "bytes": 15927
+      },
+      "BLUE": {
+        "basis": "worst",
+        "bytes": 55557
+      },
+      "BUILDER": {
+        "basis": "worst",
+        "bytes": 8905
+      },
+      "CVSS-JUDGE": {
+        "basis": "worst",
+        "bytes": 90058
+      },
+      "DESIGN": {
+        "basis": "worst",
+        "bytes": 0
+      },
+      "MECH": {
+        "basis": "worst",
+        "bytes": 0
+      },
+      "P7-AUDIT": {
+        "basis": "worst",
+        "bytes": 8905
+      },
+      "RED": {
+        "basis": "worst",
+        "bytes": 55557
+      },
+      "SCA-RUN": {
+        "basis": "worst",
+        "bytes": 0
+      },
+      "SCA-SYNTH": {
+        "basis": "worst",
+        "bytes": 15535
+      },
+      "SYNTH": {
+        "basis": "worst",
+        "bytes": 38221
+      },
+      "WRITER": {
+        "basis": "worst",
+        "bytes": 90058
+      }
+    }
+  },
+  "note": "Budgets at introduction. A manifest budget above these needs raised_reason. 2026-11-10: orchestrator budgets reset to the measured values after adding references/core/handoff-files.md. 2026-11-16: budgets raised to the measured values after splitting the DB checklist into references/checklists/database/ (user approved). 2026-11-22: mode 2 split into the start-of-mode reads (mode2) and gate M4 (finding-arbiter.md, cvss-scoring.md before step 4; mode2:M4 is the cumulative total); budgets lowered to the measured values after compressing SKILL.md, common-principles.md and the shared glossary blocks.",
+  "schema_version": 1
+}

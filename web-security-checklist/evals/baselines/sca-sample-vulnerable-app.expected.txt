@@ -1,0 +1,30 @@
+# sample-vulnerable-app の npm audit の期待値（実測: 2026-10-10、macOS arm64・npm 11.17.0・Node.js v24.19.0）。
+# 同日に、super-linter の Docker イメージ内（Alpine Linux 3.24.2、linux/amd64 のエミュレーション、bash 5.3.9、
+# npm 11.12.1、Node.js v26.5.1）でも同じ手順で同じ要約行を確認した（確認したLinux環境はこの1つだけ）。
+# このイメージ（C++コンパイラ無し）では、sqlite3 のプリビルドの取得に失敗してビルドに回り npm ci が失敗した回が1回あり、再実行で通った。
+# run4（2026-10-09）の記録 web-security-checklist-workspace/run4/outputs/sca-scan-raw-output.txt とも、要約行と、
+# 勧告を持つパッケージ・深刻度が同じである。
+# 手順: bash evals/setup-evals.sh <コピー先> でコピーに npm ci し、そのディレクトリで npm audit（一覧は npm audit --json の vulnerabilities）。
+# lockfile（evals/sample-vulnerable-app/package-lock.json）で版を固定しているので、件数が変わるのは
+# SCA の手順の退行か、npm の脆弱性データベースの更新である（README.md）。
+
+17 vulnerabilities (2 low, 3 moderate, 10 high, 2 critical)
+
+# パッケージ名 深刻度 (直接依存なら direct)
+@tootallnate/once low
+brace-expansion high
+busboy high
+cacache high
+dicer high
+express moderate direct
+http-cache-semantics high
+http-proxy-agent low
+ip-address moderate
+jsonwebtoken high direct
+make-fetch-happen high
+multer high direct
+node-gyp high
+proxy-addr critical
+qs moderate
+sqlite3 high direct
+tar critical

@@ -1,0 +1,15 @@
+{
+  "name": "mini-vulnerable-app",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Tiny intentionally vulnerable app for quick smoke tests of the web-security-checklist skill. DO NOT deploy.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "4.16.0",
+    "lodash": "4.17.15",
+    "sqlite3": "^5.0.2"
+  }
+}

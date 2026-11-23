@@ -1,0 +1,8 @@
+# shfmt はインデント設定を .editorconfig から読む(super-linter は shfmt に設定ファイルを渡さず、
+# 対象ファイルから親ディレクトリへ向かって .editorconfig を探す仕様のため、リポジトリ直下に置く)。
+# 既存のシェルスクリプト(scripts/*.sh)は2スペースインデントで書かれており、shfmt 既定(タブ)と衝突するため合わせる。
+root = true
+
+[*.sh]
+indent_style = space
+indent_size = 2

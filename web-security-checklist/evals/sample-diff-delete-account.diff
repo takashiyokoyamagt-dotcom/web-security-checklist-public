@@ -1,0 +1,45 @@
+diff --git a/routes/account.js b/routes/account.js
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/routes/account.js
+@@ -0,0 +1,19 @@
++const express = require('express');
++const { rawQuery } = require('../db');
++
++const router = express.Router();
++
++// アカウント削除API（新規追加）
++router.delete('/account/:id', (req, res) => {
++  const { id } = req.params;
++  // ユーザーIDをそのままSQL文に埋め込んで削除している
++  const sql = `DELETE FROM users WHERE id = ${id}`;
++  rawQuery(sql, (err) => {
++    if (err) {
++      return res.status(500).json({ error: err.message });
++    }
++    res.json({ ok: true });
++  });
++});
++
++module.exports = router;
+diff --git a/server.js b/server.js
+index 2222222..3333333 100644
+--- a/server.js
++++ b/server.js
+@@ -6,6 +6,7 @@
+ const searchRoutes = require('./routes/search');
+ const commentRoutes = require('./routes/comments');
+ const uploadRoutes = require('./routes/upload');
++const accountRoutes = require('./routes/account');
+ 
+ const app = express();
+ app.set('view engine', 'ejs');
+@@ -32,6 +33,7 @@
+ app.use('/', searchRoutes);
+ app.use('/', commentRoutes);
+ app.use('/', uploadRoutes);
++app.use('/', accountRoutes);
+ 
+ // 【意図的な脆弱性】本番でもスタックトレースをそのままレスポンスに含めるエラーハンドラ (CWE-209)
+ app.use((err, req, res, next) => {

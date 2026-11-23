@@ -1,0 +1,23 @@
+{
+  "formatter": {
+    "indentStyle": "space",
+    "indentWidth": 2
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single"
+    }
+  },
+  "json": {
+    "formatter": {
+      "lineWidth": 100
+    }
+  },
+  "files": {
+    "includes": [
+      "**",
+      "!**/evals/sample-vulnerable-app/**/*.js",
+      "!**/evals/mini-vulnerable-app/**/*.js"
+    ]
+  }
+}
