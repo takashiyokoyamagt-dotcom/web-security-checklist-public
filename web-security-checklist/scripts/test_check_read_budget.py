@@ -58,9 +58,9 @@ class Fixture(unittest.TestCase):
         by = {x["reader"]: x["bytes"] for x in out["readers"]}
         self.assertEqual(by["mode3:R1"] - by["mode3:G0"], 0)
         self.assertEqual(by["mode3:G0"], 62940)  # P7モード2修正の後（旧63,288）
-        self.assertEqual(by["mode2"], 86416)  # 手順4の前まで（ゲートM4の前。P7第5回修正の後、旧86,480）
-        self.assertEqual(by["mode2:M4"], 170484)  # ゲートM4の後の累計（finding-final.mdを含む。P7第5回修正の後、旧170,548）
-        self.assertEqual(by["mode3:G7"], 294609)  # P7第5回修正の後（旧294,618）
+        self.assertEqual(by["mode2"], 86308)  # トークン削減（2026-11-24）の後、旧86,416。手順4の前まで（ゲートM4の前。P7第5回修正の後、旧86,480）
+        self.assertEqual(by["mode2:M4"], 170376)  # トークン削減（2026-11-24）の後、旧170,484。ゲートM4の後の累計（finding-final.mdを含む。P7第5回修正の後、旧170,548）
+        self.assertEqual(by["mode3:G7"], 296245)  # cwe-top25.mdの補助の表にDBのCWE 21件を追加し、トークン削減をした後（296,262→。旧294,609。その前は294,618）
         self.assertEqual(os.path.getsize(os.path.join(ROOT, "SKILL.md")), 15274)  # P6第2弾とレビュー修正で15293から変更（その前は15718）
 
     def test_file_in_skill_md_missing_from_manifest(self):

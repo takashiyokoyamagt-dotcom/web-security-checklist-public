@@ -337,7 +337,7 @@ def self_test():
 
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     for k in ("--work", "--target", "--mask-file", "--out-dir", "--repo-name", "--date", "--sca-raw"):
         ap.add_argument(k)
     ap.add_argument("--unified", default="security-audit-report.md")

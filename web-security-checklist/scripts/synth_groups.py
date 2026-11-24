@@ -28,7 +28,10 @@ apply: 全項目の`group.diff`（`synth/`以下の`<work_id>/group.diff`。SYNT
 JSONを読み込みで確かめる。SYNTHが要検討としてdiffを作らなかった群は、`group.diff`の代わりに理由（「要検討」を含む）を
 `no-diff.txt`に置けば欠けにしない（NODIFF）。SYNTH・SCA-SYNTHの戻り値（JSON1行。UTF-8）は`group.diff`と同じ
 ディレクトリの`return.json`から読み（JSON・`work_id`・キーを検査。欠け・不正はRETURN_NG）、`synth-auto.jsonl`の行と
-合わせて`members.json`の順に`synth-out.jsonl`へ書く（手で連結しない）。
+合わせて`members.json`の順に`synth-out.jsonl`へ書く（手で連結しない）。戻り値の`fix_suggestion`が`@group.diff`なら、
+同じディレクトリの`group.diff`の内容（prepareの`--mask-file`と対象の設定ファイルの秘密値は`<マスク>`。戻り値に
+`fix_note`があればその文をdiffの前に置き、`fix_note`のキーは除く）で埋める（SYNTHがdiffを書き写さなくてよい）。
+作業ツリーの代表diffは、末尾に改行が無いファイルにも改行の無いまま当てる（単独項目の自動化の条件は変えない）。
 結果を`synth-apply/apply-log.txt`に書き、欠け・失敗があれば rc1。
 判断を含まない。既存の出力があれば`--force`が無い限り rc2。Stdlib only, Python 3.9+（applyはgitを使う）.
 """
@@ -54,6 +57,8 @@ HUNK = re.compile(r"^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@")
 REVIEW = "要検討"
 NODIFF = "no-diff.txt"  # SYNTHが要検討としてdiffを作らなかった群の理由（group.diffの代わりに置く）
 RETURN = "return.json"  # SYNTH・SCA-SYNTHの戻り値のJSON1行（UTF-8。group.diffと同じディレクトリ）。applyがsynth-out.jsonlに連結
+FILL = "@group.diff"  # 戻り値の fix_suggestion をこの値にすると、applyが group.diff の内容（マスク済み）で埋める
+PREP = "_prepare.json"  # prepareの設定（マスク用ファイルのパス）。synth/auto/ に置く
 _COMMON_K = ("fix_suggestion", "intent", "design_refs", "behavior_change", "compat_class", "design_conflict",
              "alternatives", "unmerged_notes", "open_points")
 SYNTH_RET_K = ("work_id", "members", "fold_log") + _COMMON_K + ("applied_files", "checks")  # agent-roles.md SYNTH
@@ -139,6 +144,7 @@ def apply_hunks(cur, hunks, path):
 
 
 def read_text(target, rel):
+    """(行のリスト〔改行なし〕, 末尾に改行が無いか)"""
     root = os.path.realpath(target)
     p = os.path.realpath(os.path.join(root, rel))
     if os.path.commonpath([root, p]) != root:
@@ -150,9 +156,16 @@ def read_text(target, rel):
         raise NoApply("%s: BOM付き" % rel)
     if "\r\n" in text:
         raise NoApply("%s: CRLF" % rel)
-    if text and not text.endswith("\n"):
-        raise NoApply("%s: 末尾に改行が無い" % rel)
-    return text.split("\n")[:-1] if text else []
+    noeol = bool(text) and not text.endswith("\n")  # 末尾の改行の有無は変えずに保つ
+    return (text + "\n" if noeol else text).split("\n")[:-1] if text else [], noeol
+
+
+def with_eol(lines, noeol):
+    """行に改行を付ける。noeolなら最後の行だけ付けない"""
+    out = [s + "\n" for s in lines]
+    if noeol and out:
+        out[-1] = out[-1][:-1]
+    return out
 
 
 def strict_diff(target, diff):
@@ -169,7 +182,9 @@ def strict_diff(target, diff):
                 raise NoApply("%s: 新規作成のdiffだが既に有る" % new)
             a = []
         else:
-            a = read_text(target, old)
+            a, noeol = read_text(target, old)
+            if noeol:  # 単独項目でも自動にせずSYNTHへ回す（従来どおり。作業ツリーには改行の無いまま当てる）
+                raise NoApply("%s: 末尾に改行が無い" % old)
         b = apply_hunks(a, hunks, new)
         if a == b:
             continue
@@ -281,6 +296,9 @@ def prepare(work, target, mask_file, force=False):
         packets.append((wid, len(ids), reason, ",".join(fs)))
     with open(outs[0], "w", encoding="utf-8", newline="\n") as f:
         f.write("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in auto))
+    os.makedirs(outs[2], exist_ok=True)
+    with open(os.path.join(outs[2], PREP), "w", encoding="utf-8", newline="\n") as f:  # applyが埋めるdiffのマスク用
+        json.dump({"mask_file": os.path.abspath(mask_file)}, f, ensure_ascii=False)
     kinds = {}
     for _, _, r, _ in packets:
         k = r.split("（")[0]
@@ -354,21 +372,22 @@ def make_tree(target, tree, base_diff):
         files = parse_diff(base_diff or "")
         if not files:
             return False
-        new_text = {}
+        new_text, noeol = {}, {}
         for old, new, hunks in files:
             if new is None or (old is not None and old != new):
                 return False
             if old is None and os.path.exists(os.path.join(tree, new)):
                 return False
-            cur = [] if old is None else read_text(tree, old)
-            new_text[new] = apply_hunks(new_text.get(new, cur), hunks, new)
+            if new not in new_text:
+                new_text[new], noeol[new] = ([], False) if old is None else read_text(tree, old)
+            new_text[new] = apply_hunks(new_text[new], hunks, new)
     except (NoApply, OSError, UnicodeDecodeError):
         return False
     for rel, lines in new_text.items():
         p = os.path.join(tree, rel)
         os.makedirs(os.path.dirname(p) or tree, exist_ok=True)
         with open(p, "w", encoding="utf-8", newline="\n") as f:
-            f.write("".join(s + "\n" for s in lines))
+            f.write("".join(with_eol(lines, noeol[rel])))
     return True
 
 
@@ -411,6 +430,25 @@ def read_return(wid, paths):
     return obj, ("%s のキーが無い: %s" % (RETURN, ",".join(miss))) if miss else None
 
 
+def fill_diff(work, target, row, paths, masker):
+    """戻り値の`fix_suggestion`が`@group.diff`なら、group.diffの内容（秘密値は<マスク>。`fix_note`があれば前に置く）
+    で置き換える。(行, 問題)"""
+    if len(paths) != 1:
+        return None, "fix_suggestion が %s だが group.diff が無い、または複数" % FILL
+    if not masker:
+        try:
+            with open(os.path.join(work, "synth", "auto", PREP), encoding="utf-8") as f:
+                masker.append(mp.Masker(target, json.load(f)["mask_file"]))
+        except (OSError, ValueError, KeyError) as e:
+            return None, "fix_suggestion を埋めるマスクの設定が読めない（prepareの %s）: %s" % (PREP, e)
+    with open(paths[0], encoding="utf-8", newline="") as f:
+        diff = f.read()
+    row = dict(row)
+    note = str(row.pop("fix_note", "") or "").rstrip("\n")
+    row["fix_suggestion"] = masker[0]((note + "\n" if note else "") + diff)
+    return row, None
+
+
 def apply(work, target, force=False):
     out = os.path.join(work, "synth-apply")
     if os.path.exists(out):
@@ -427,11 +465,13 @@ def apply(work, target, force=False):
     ap = os.path.join(work, "synth-auto.jsonl")
     autos = {r.get("work_id"): r for r in (mp.load_jsonl(ap) if os.path.isfile(ap) else [])}
     node = shutil.which("node")
-    log, bad, rows = [], 0, []
+    log, bad, rows, masker = [], 0, [], []
     for wid in members:
         row, why = autos.get(wid), None
         if row is None:
             row, why = read_return(wid, rets.get(wid, []))
+            if not why and row.get("fix_suggestion") == FILL:
+                row, why = fill_diff(work, target, row, found.get(wid, []), masker)
         if why:
             log.append("%s\tRETURN_NG\t%s" % (wid, why))
             bad += 1
@@ -651,6 +691,38 @@ def self_test():
                 f.write("--- a/routes/a.js\n+++ b/routes/a.js\n@@ -19,3 +19,3 @@\n l19\n-l20\n+L20\n l21\n")
             rc, out, lg = run_apply()
             assert rc == 1 and "F3\tMISSING\tgroup.diff と no-diff.txt が両方ある" in lg, (out, lg)
+            # fix_suggestion が @group.diff: applyが group.diff の内容（マスク済み。fix_noteを前に）で埋める
+            os.remove(os.path.join(os.path.dirname(ndp), "group.diff"))
+            with open(os.path.join(work, "synth", "K1", "F1", "group.diff"), "a", encoding="utf-8", newline="\n") as f:
+                f.write("+// Sup3rS3cretValue\n")
+            ret("F1", fix_suggestion=FILL, fix_note="要検討（暫定のdiff）。")
+            rc, out, lg = run_apply()
+            r1 = [r for r in mp.load_jsonl(so) if r["work_id"] == "F1"][0]
+            assert r1["fix_suggestion"].startswith("要検討（暫定のdiff）。\n--- a/routes/a.js\n") and "fix_note" not in r1, r1
+            assert "<マスク>" in r1["fix_suggestion"] and "Sup3rS3cretValue" not in r1["fix_suggestion"], r1
+            ret("F1", fix_suggestion=FILL)
+            os.rename(os.path.join(work, "synth", "K1", "F1", "group.diff"), os.path.join(d, "g1.diff"))
+            rc, out, lg = run_apply()
+            assert rc == 1 and "F1\tRETURN_NG\tfix_suggestion が @group.diff だが group.diff が無い" in lg, lg
+    with tempfile.TemporaryDirectory() as d:  # 末尾に改行が無いファイル
+        tgt = os.path.join(d, "app")
+        os.makedirs(tgt)
+        with open(os.path.join(tgt, "b.js"), "w", encoding="utf-8", newline="\n") as f:
+            f.write("b1\nb2\nb3")
+        dfx = "--- a/b.js\n+++ b/b.js\n@@ -2,2 +2,2 @@\n b2\n-b3\n+B3\n"
+        try:
+            strict_diff(tgt, dfx)
+            raise AssertionError("単独項目の自動化の条件は従来どおり（末尾に改行が無いファイルはSYNTHへ）")
+        except NoApply as e:
+            assert str(e) == "b.js: 末尾に改行が無い", e
+        if shutil.which("git"):
+            tree = os.path.join(d, "tree")
+            assert make_tree(tgt, tree, dfx + "@@ -1,1 +1,2 @@\n b1\n+b1x\n") is False  # 当たらない順のhunk
+            rmtree(tree)
+            assert make_tree(tgt, tree, dfx) is True
+            assert open(os.path.join(tree, "b.js"), encoding="utf-8", newline="").read() == "b1\nb2\nB3"
+            r = git(tree, "diff", "--no-color")
+            assert r.stdout.decode().count("\\ No newline at end of file") == 2, r.stdout
     print("self-test OK")
     return 0
 

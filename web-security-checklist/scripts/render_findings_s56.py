@@ -236,7 +236,7 @@ def render(records, target, masks):
 
 
 def main():
-    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("findings")
     ap.add_argument("--target", required=True)
     ap.add_argument("--mask-file", required=True,

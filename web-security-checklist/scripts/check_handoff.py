@@ -183,7 +183,7 @@ def beyond_eof(target, file_line):
 
 
 def run(argv):
-    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--snapshot")
     ap.add_argument("--save")
     ap.add_argument("--check", action="store_true")

@@ -54,6 +54,27 @@ https://cwe.mitre.org/top25/
 | CWE-613 | Insufficient Session Expiration | セッション管理 |
 | CWE-384 | Session Fixation | セッション管理 |
 | CWE-1104 | Use of Unmaintained Third Party Components | 依存関係管理 |
+| CWE-117 | Improper Output Neutralization for Logs | データベース |
+| CWE-213 | Exposure of Sensitive Information Due to Incompatible Policies | データベース |
+| CWE-250 | Execution with Unnecessary Privileges | データベース |
+| CWE-256 | Plaintext Storage of a Password | データベース |
+| CWE-269 | Improper Privilege Management | データベース |
+| CWE-295 | Improper Certificate Validation | データベース |
+| CWE-311 | Missing Encryption of Sensitive Data | データベース |
+| CWE-312 | Cleartext Storage of Sensitive Information | データベース |
+| CWE-359 | Exposure of Private Personal Information to an Unauthorized Actor | データベース |
+| CWE-400 | Uncontrolled Resource Consumption | データベース |
+| CWE-521 | Weak Password Requirements | データベース |
+| CWE-540 | Inclusion of Sensitive Information in Source Code | データベース |
+| CWE-564 | Use of Hibernate with HQL/SQL Query String Containing External Input | データベース |
+| CWE-653 | Improper Isolation or Compartmentalization | データベース |
+| CWE-732 | Incorrect Permission Assignment for Critical Resource | データベース |
+| CWE-778 | Insufficient Logging | データベース |
+| CWE-916 | Use of Password Hash With Insufficient Computational Effort | データベース |
+| CWE-943 | Improper Neutralization of Special Elements in Data Query Logic | データベース |
+| CWE-1327 | Binding to an Unrestricted IP Address | データベース |
+| CWE-1392 | Use of Default Credentials | データベース |
+| CWE-1395 | Dependency on Vulnerable Third-Party Component | データベース |
 
 ## 使い方
 - モード2/3の指摘の`category`フィールドとして、`principles.md`のカテゴリ名に加えてCWE番号を併記すると

@@ -410,7 +410,7 @@ def self_test():
 
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("diffs", nargs="*")
     ap.add_argument("--members")
     ap.add_argument("--target", help="audited directory, used to locate diff fragments without @@")

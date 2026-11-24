@@ -7,11 +7,11 @@
       },
       "mode2": {
         "basis": "required",
-        "bytes": 86416
+        "bytes": 86308
       },
       "mode2:M4": {
         "basis": "required",
-        "bytes": 170484
+        "bytes": 170376
       },
       "mode3:G0": {
         "basis": "required",
@@ -19,27 +19,27 @@
       },
       "mode3:G1": {
         "basis": "required",
-        "bytes": 86856
+        "bytes": 86839
       },
       "mode3:G2": {
         "basis": "required",
-        "bytes": 86856
+        "bytes": 86839
       },
       "mode3:G3": {
         "basis": "required",
-        "bytes": 205955
+        "bytes": 207591
       },
       "mode3:G5": {
         "basis": "required",
-        "bytes": 262657
+        "bytes": 264293
       },
       "mode3:G6": {
         "basis": "required",
-        "bytes": 275486
+        "bytes": 277122
       },
       "mode3:G7": {
         "basis": "required",
-        "bytes": 294609
+        "bytes": 296245
       },
       "mode3:R1": {
         "basis": "required",
@@ -53,7 +53,7 @@
       },
       "BLUE": {
         "basis": "worst",
-        "bytes": 55557
+        "bytes": 57924
       },
       "BUILDER": {
         "basis": "worst",
@@ -77,7 +77,7 @@
       },
       "RED": {
         "basis": "worst",
-        "bytes": 55557
+        "bytes": 57924
       },
       "SCA-RUN": {
         "basis": "worst",
@@ -97,6 +97,6 @@
       }
     }
   },
-  "note": "Budgets at introduction. A manifest budget above these needs raised_reason. 2026-11-10: orchestrator budgets reset to the measured values after adding references/core/handoff-files.md. 2026-11-16: budgets raised to the measured values after splitting the DB checklist into references/checklists/database/ (user approved). 2026-11-22: mode 2 split into the start-of-mode reads (mode2) and gate M4 (finding-arbiter.md, cvss-scoring.md before step 4; mode2:M4 is the cumulative total); budgets lowered to the measured values after compressing SKILL.md, common-principles.md and the shared glossary blocks.",
+  "note": "Budgets at introduction. A manifest budget above these needs raised_reason. 2026-11-10: orchestrator budgets reset to the measured values after adding references/core/handoff-files.md. 2026-11-16: budgets raised to the measured values after splitting the DB checklist into references/checklists/database/ (user approved). 2026-11-22: mode 2 split into the start-of-mode reads (mode2) and gate M4 (finding-arbiter.md, cvss-scoring.md before step 4; mode2:M4 is the cumulative total); budgets lowered to the measured values after compressing SKILL.md, common-principles.md and the shared glossary blocks. 2026-11-23: RED and BLUE raised to the measured values after adding DB-NET-08 (connection target from per-environment settings) to references/checklists/database/network-tls.md (user approved). 2026-11-24: RED and BLUE raised to the measured values after adding an ORM/driver default query-logging hint (Sequelize without logging: false, Prisma log: ['query'], SQLAlchemy echo=True) to DB-LOG-02 in references/checklists/database/logging.md (user approved). 2026-11-24: orchestrator mode3 G3/G5/G6/G7 and RED and BLUE raised to the measured values after adding 21 CWEs cited by references/checklists/database/*.md to the supplementary table of references/sources/cwe-top25.md (user approved).",
   "schema_version": 1
 }

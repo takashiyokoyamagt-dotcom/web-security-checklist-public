@@ -2,6 +2,14 @@
 
 `web-security-checklist`の版ごとの主な変更。版番号は`web-security-checklist/manifest.json`の`skill.version`。
 
+## 未リリース（main）
+
+- **DBの接続先の設定（DB-NET-08）**: DBの接続先（ホスト・ポート・DB名、SQLiteはファイルの場所）を環境ごとの設定から読み、コードに直書きしないことを確かめる項目を`references/checklists/database/network-tls.md`に足した。
+- **ORMの既定のクエリログ**: DB-LOG-02の手掛かりに、ORM・ドライバのクエリログが既定または設定で有効な場合（Sequelizeで`logging: false`が無い等）を足した。
+- **CWEの補助の表**: DBのチェックリストが挙げるCWE 21件を`references/sources/cwe-top25.md`の補助の表に足し、出典別レポートのCWE別に出るようにした。
+- **消費トークンの削減（一部）**: SYNTHが修正diffを`return.json`に書き写さずに済むようにし（`"@group.diff"`）、末尾に改行の無いファイルでも代表のdiffを事前に当て、WRITERの入力に該当するSYNTHの結果を含めた。同梱スクリプトの`--help`は説明全文を出す。監査の手順・検査・RED/BLUEの入力は変えていない。
+- 読込量の予算は、上の追加に合わせて実測値に更新した。
+
 ## v2.0.0（2026-11-23）
 
 最初の版番号付きの版。

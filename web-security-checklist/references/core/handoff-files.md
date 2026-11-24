@@ -1,4 +1,4 @@
-# 結果のファイル受け渡しとレポート5・6節の組み立て（モード3。P1仮組込み）
+# 結果のファイル受け渡しとレポート5・6節の組み立て（モード3）
 
 本ファイルはゲートG1で`references/core/agent-roles.md`と一緒に`Read`する。モード3のRED・BLUE・CVSS-JUDGE・WRITERに適用する。本ファイルは、他の参照ファイルの「結果は戻り値で返す／受領後に永続化する」と、5b・5cの表の作り方に優先する。
 
@@ -32,7 +32,7 @@ BLUEには、入力として対応するREDの出力ファイルのパスを渡�
 
 ## 4. WRITERの出力キー
 
-WRITERの指示書では、1指摘＝JSON1行で次のキーを指定する（`finding-final.md`5dの各フィールドに対応）: `id`（作業ID）・`short_summary`・`summary`・`plain`・`tech`・`code_ranges`（`"file:start-end"`の配列。最大3範囲・各15行以内。該当コードはスクリプトが対象から読むので、コードを引用させない）・`annot`（文字列の配列。1要素＝1箇条）・`scenario`・`fix_expl`・`residual`（同じ形。無ければ`[]`）・`intent`・`behavior`・`compat`（`①`・`②`・`③`・`②③`・`①③`）・`compat_note`・`design_conflict`（`有り`／`無し`）・`design_refs`・`review`（修正案が要検討の指摘だけ。他は空）・`alts`（`[案名,内容,メリット,デメリット,デグレの可能性,推奨度]`の配列）・`alts_note`・`audit_method`・`audit_verdict`・`audit_evidence`。
+WRITERに`synth-out.jsonl`を読ませない（最終の修正案と新項目はパケットの`synth`）。WRITERの指示書では、1指摘＝JSON1行で次のキーを指定する（`finding-final.md`5dの各フィールドに対応）: `id`（作業ID）・`short_summary`・`summary`・`plain`・`tech`・`code_ranges`（`"file:start-end"`の配列。最大3範囲・各15行以内。該当コードはスクリプトが対象から読むので、コードを引用させない）・`annot`（文字列の配列。1要素＝1箇条）・`scenario`・`fix_expl`・`residual`（同じ形。無ければ`[]`）・`intent`・`behavior`・`compat`（`①`・`②`・`③`・`②③`・`①③`）・`compat_note`・`design_conflict`（`有り`／`無し`）・`design_refs`・`review`（修正案が要検討の指摘だけ。他は空）・`alts`（`[案名,内容,メリット,デメリット,デグレの可能性,推奨度]`の配列）・`alts_note`・`audit_method`・`audit_verdict`・`audit_evidence`。
 
 ## 5. findings.jsonl と5・6節の組み立て
 

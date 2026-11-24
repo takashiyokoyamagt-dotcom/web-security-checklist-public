@@ -226,7 +226,7 @@ def self_test():
 
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     for k in ("--work", "--report", "--target", "--mask-file", "--out"):
         ap.add_argument(k)
     ap.add_argument("--force", action="store_true")

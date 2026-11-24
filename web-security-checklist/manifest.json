@@ -635,11 +635,11 @@
       },
       "mode2": {
         "basis": "required",
-        "bytes": 86416
+        "bytes": 86308
       },
       "mode2:M4": {
         "basis": "required",
-        "bytes": 170484
+        "bytes": 170376
       },
       "mode3:G0": {
         "basis": "required",
@@ -651,37 +651,37 @@
       },
       "mode3:G1": {
         "basis": "required",
-        "bytes": 86856
+        "bytes": 86839
       },
       "mode3:G2": {
         "basis": "required",
-        "bytes": 86856
+        "bytes": 86839
       },
       "mode3:G3": {
         "basis": "required",
-        "bytes": 205955
+        "bytes": 207591
       },
       "mode3:G5": {
         "basis": "required",
-        "bytes": 262657
+        "bytes": 264293
       },
       "mode3:G6": {
         "basis": "required",
-        "bytes": 275486
+        "bytes": 277122
       },
       "mode3:G7": {
         "basis": "required",
-        "bytes": 294609
+        "bytes": 296245
       }
     },
     "roles": {
       "RED": {
         "basis": "worst",
-        "bytes": 55557
+        "bytes": 57924
       },
       "BLUE": {
         "basis": "worst",
-        "bytes": 55557
+        "bytes": 57924
       },
       "AUDIT5E": {
         "basis": "worst",

@@ -3,7 +3,7 @@
 | ID | 証跡 | 重大度目安 | 確認内容 | 検出の手掛かり | 根拠 |
 | --- | --- | --- | --- | --- | --- |
 | DB-LOG-01 | SRC | Medium | DBエラー（構文エラー、制約違反、列名）やスタックトレースをクライアントに返さない | `res.send(err.message)`、`no such column`・`syntax error` を応答に含める、例外の本文の返却 | CWE-209 |
-| DB-LOG-02 | SRC | Medium | ログにパスワード・トークン・個人情報を含むクエリやパラメータを残さない | クエリ全文とバインド値のログ出力、ORMのデバッグログを本番で有効、`log_statement = 'all'` でパラメータを記録 | CWE-532 |
+| DB-LOG-02 | SRC | Medium | ログにパスワード・トークン・個人情報を含むクエリやパラメータを残さない | クエリ全文とバインド値のログ出力、ORM・ドライバのクエリログが既定または設定で有効（Sequelizeで`logging: false`が無い、Prismaの`log: ['query']`、SQLAlchemyの`echo=True`）、`log_statement = 'all'` でパラメータを記録 | CWE-532 |
 | DB-LOG-03 | SRC+CFG+OPS | Medium | セキュリティ上重要なDBイベントを記録する。対象は、重要データの参照と変更、ユーザーの作成（特に特権）、ロール・権限の変更と昇格の試み、構造（スキーマ）の変更、管理者の操作、ログオンとログオフ、障害 | 監査の設定（`pgaudit`、`log_connections`、MySQLのaudit plugin）が無い、権限・ロール変更のコードに記録が無い | CWE-778。ISM-1537 |
 | DB-LOG-04 | SRC+CFG | Low | 異常なクエリ（コメントを含む、複数のクエリが埋め込まれた、実行可能コマンドを使う）を記録し、検知できるようにする | クエリの失敗やエラーの記録が無い、`xp_cmdshell`・`COPY ... PROGRAM` の利用 | CWE-778。ISM-1537 |
 | DB-LOG-05 | CFG+OPS | Low | DBのログを中央に集約し、改ざんされない場所に保管する | ログの転送設定が無い、ログをDBと同じホストにだけ保存 | CWE-778。ISM-1537 |

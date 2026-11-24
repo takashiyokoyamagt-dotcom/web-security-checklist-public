@@ -68,13 +68,13 @@ SIZE_RANGE = {
     "references/cvss/cvss-scoring.md": (16600, 34800),  # 33,386
     "references/cvss/cvss.md": (1800, 4100),  # 3,770
     # 上下限を再計算: 基準年度版を明記し、表をTop 25（公式の全25件）と補助に分けた（3,162→）
-    "references/sources/cwe-top25.md": (2400, 5300),  # 4,932
+    "references/sources/cwe-top25.md": (2400, 7300),  # 6,569 (補助の表にDBのCWE 21件, user approved 2026-11-24)
     # P4: database.mdを7ファイルに分割（実測+4%（最低+300B）を100B単位で切り上げ、下限は約半分）
     "references/checklists/database/_index.md": (1500, 3400),  # 3,064
     "references/checklists/database/sqli.md": (1200, 2800),  # 2,473
     "references/checklists/database/access.md": (1100, 2600),  # 2,238
     "references/checklists/database/data-protection.md": (1400, 3200),  # 2,888
-    "references/checklists/database/network-tls.md": (1200, 2700),  # 2,376
+    "references/checklists/database/network-tls.md": (1200, 3300),  # 2,975 (DB-NET-08, user approved 2026-11-23)
     "references/checklists/database/logging.md": (1100, 2500),  # 2,154
     # P4: 確認依頼に既定のアカウント（DB-OPS-10）とパッチ（DB-OPS-11）を追加（利用者の承認 2026-11-17。同じ規則で再計算）
     "references/checklists/database/ops-requests.md": (1600, 3500),  # 3,104

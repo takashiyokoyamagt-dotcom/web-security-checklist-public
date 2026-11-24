@@ -20,7 +20,9 @@ Usage:
   `chain`・`same`（5b-pair-table.mdの「連鎖切断」「同一箇所」の相手の`{"n":"5.M","summary":…}`）・
   `code`（finding-final.md 5d補足の該当コード。各構成のREDの`vulnerable_code`を`file_line`のファイルで
   `locate_snippet.py`と同じ方法で照合し、一致した範囲を`{"file","start_line","end_line","chunks","code"}`で。
-  一致しないものは`{"file","matched":false,"hint":…}`。WRITERが実ファイルを読んで書く）。
+  一致しないものは`{"file","matched":false,"hint":…}`。WRITERが実ファイルを読んで書く）・
+  `synth`（`synth-out.jsonl`があるとき。その項目の行から`work_id`・`members`を除いたもの。`fix_suggestion`が最終の修正案、
+  `intent`〜`open_points`が群の新項目の最終版。WRITERに`synth-out.jsonl`を読ませなくてよい）。
 秘密値は`render_findings_s56.py`と同じく、対象の設定ファイルから集めた値と`--mask-file`の値を`<マスク>`にする。
 指示書の本文（役割・文体・出力キー・Arbiterの補足）はパケットに入れない。既存の出力先があれば`--force`が無い限り rc2。
 判断を含まない。Stdlib only, Python 3.9+.
@@ -237,6 +239,8 @@ def build(work, target, role, mask_file, idmap=None, batch=10):
             if r.get("kind") != "alt":
                 raw[r["id"]] = r["raw"]
 
+        sp = os.path.join(work, "synth-out.jsonl")
+        synth = {r.get("work_id"): r for r in load_jsonl(sp)} if os.path.isfile(sp) else {}
         reps = {u: representative(ms, log) for u, ms in members.items()}
         unit_of = {m: u for u, ms in members.items() for m in ms}
         chain, same = partners(work, unit_of, idmap_n, {u: red[reps[u]].get("summary") for u in members})
@@ -254,6 +258,8 @@ def build(work, target, role, mask_file, idmap=None, batch=10):
                           "representative": reps[u], "representative_diff": log[reps[u]].get("diff"),
                           "chain": chain.get(u, []), "same": same.get(u, []), "code": code_packets(target, rows),
                           "members": [member(m, red, blue, True) for m in ms]})
+            if u in synth:  # 5c補足3: SYNTHの戻り値（最終の修正案と新項目）。WRITERに synth-out.jsonl を読ませない
+                items[-1]["synth"] = {k: v for k, v in synth[u].items() if k not in ("work_id", "members")}
             rep = next(x for x in items[-1]["members"] if x["member"] == reps[u])
             rep["fix_suggestion_check"] = drop_same_diff(rep.get("fix_suggestion_check"), log[reps[u]].get("diff"))
         if problems:
@@ -332,6 +338,10 @@ def self_test():
             assert run(work, tgt, "judge", mf, batch=1) == 0
             assert run(work, tgt, "judge", mf) == 2
             assert run(work, tgt, "writer", mf, idm) == 0
+            assert "synth" not in load_jsonl(os.path.join(work, "writer-in", "batch-1.jsonl"))[0]  # synth-out無し
+            put("synth-out.jsonl", [{"work_id": "F1", "members": ["R0101"], "fix_suggestion": "fd super-secret-value-123",
+                                     "intent": "i", "open_points": ["o"]}])
+            assert run(work, tgt, "writer", mf, idm, force=True) == 0
         finally:
             sys.stdout = old
         j = load_jsonl(os.path.join(work, "judge-in", "batch-2.jsonl"))
@@ -342,6 +352,7 @@ def self_test():
         assert x["chain"] == [{"n": "5.1", "summary": "secret <マスク>"}] and x["representative"] == "R0101", x
         assert x["code"][0]["start_line"] == 2 and x["code"][0]["end_line"] == 3, x["code"]
         assert w[0]["code"][0]["matched"] is False, w[0]["code"]
+        assert x["synth"] == {"fix_suggestion": "fd <マスク>", "intent": "i", "open_points": ["o"]} and "synth" not in w[0], x
         assert "super-secret" not in json.dumps(w, ensure_ascii=False)
         # 代表のBLUE検証欄のdiffがrepresentative_diffと同じなら省略の印。他の欄は残す
         assert x["members"][0]["fix_suggestion_check"] == {"result": "合格", "diff": SAME_DIFF}, x["members"]
@@ -351,7 +362,7 @@ def self_test():
 
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--work")
     ap.add_argument("--target")
     ap.add_argument("--role", choices=("judge", "writer"))
