@@ -1,4 +1,4 @@
-# 各チェッカーの結果の基準値（2026-10-12、ブランチ feat/finding-precision〔47節・第三者レビュー反映後〕のスクリプトで実測）。
+# 各チェッカーの結果の基準値（2026-10-12、第三者レビュー反映後のスクリプトで実測）。
 # mini-smoke-3・run4 の各行は、過去のモード3の実行成果物（check_refs は対象の evals/ のアプリと照合）
 # web-security-checklist-workspace/{mini-smoke-3,run4}/outputs/ に対する各チェッカーの結果である。
 # 成果物はリポジトリの web-security-checklist-workspace/ 側にあり、スキルのディレクトリには無い。

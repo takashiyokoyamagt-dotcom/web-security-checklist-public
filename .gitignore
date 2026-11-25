@@ -1,0 +1,7 @@
+# Never commit local secrets or local Claude settings.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.claude/settings.local.json
